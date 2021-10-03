@@ -1,15 +1,20 @@
-import { StatusBar } from "expo-status-bar";
+// import { StatusBar } from "expo-status-bar";
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { View, StyleSheet, Platform, StatusBar } from "react-native";
+
+// import {
+//   useDimensions,
+//   useDeviceOrientation,
+// } from "@react-native-community/hooks";
+
+import HomeScreen from "./app/screens/HomeScreen";
 
 export default function App() {
-  let x = 1;
   console.log("App executed");
 
   return (
     <View style={styles.container}>
-      <Text>deez nutz</Text>
-      <StatusBar style="auto" />
+      <HomeScreen />
     </View>
   );
 }
@@ -17,8 +22,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: "black",
+    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
   },
 });
