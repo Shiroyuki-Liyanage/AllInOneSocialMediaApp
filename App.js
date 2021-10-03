@@ -10,7 +10,7 @@ import { View, StyleSheet, Platform, StatusBar } from "react-native";
 import HomeScreen from "./app/screens/HomeScreen";
 
 export default function App() {
-  console.log("App has been executed");
+  console.log("App executed");
 
   return (
     <View style={styles.container}>
