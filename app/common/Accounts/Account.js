@@ -8,6 +8,9 @@ class Account {
   getAccountID() {
     return this.accountID;
   }
+  getAccountType() {
+    return this.accountType;
+  }
   isMuted() {
     return this.muted;
   }

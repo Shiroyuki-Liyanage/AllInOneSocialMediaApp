@@ -3,11 +3,15 @@ import * as SecureStore from "expo-secure-store";
 import { GetTwitterAuthKey } from "../StoreAuthKey";
 
 class TwitterAPIController extends APIController {
-  async GetRequest() {
+  async GetRequest(account) {
+    console.log(":)");
     var requestOptions = await this.SetUpRequest();
 
-    let ID = await this.GetAdvanceUserInfo(requestOptions, "2401655624");
-    console.log(ID);
+    let Profile = await this.GetAdvanceUserInfo(
+      requestOptions,
+      account.getAccountID()
+    );
+    console.log(Profile);
   }
 
   /**

@@ -8,12 +8,17 @@ import {
 } from "react-native";
 import SocialPost from "./components/SocialPost";
 
-import { GetMe, GetProfileImage } from "../common/GetTweets";
-import TwitterAPIController from "../common/APIControllers/TwitterAPIController";
+import SocialPostManager from "../common/SocialPostManager";
+import TwitterAccount from "../common/Accounts/TwitterAccount";
+import { AccountType } from "../common/Accounts/AccountType";
 
 function HomeScreen(props) {
-  var TwitterAPI = new TwitterAPIController();
-  TwitterAPI.GetRequest();
+  var PostManager = new SocialPostManager();
+  PostManager.GetAccounts().addAccount(
+    new TwitterAccount("2401655624", AccountType.TWITTER)
+  );
+
+  PostManager.requestContent();
 
   //GetProfileImage().then((Profile) => console.log(Profile));
 
