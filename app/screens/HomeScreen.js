@@ -8,7 +8,10 @@ import {
 } from "react-native";
 import SocialPost from "./components/SocialPost";
 
+import GetMe from "../common/GetTweets";
+
 function HomeScreen(props) {
+  GetMe();
   return (
     <ScrollView>
       <SocialPost
