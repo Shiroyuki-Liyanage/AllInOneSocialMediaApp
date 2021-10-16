@@ -8,10 +8,15 @@ import {
 } from "react-native";
 import SocialPost from "./components/SocialPost";
 
-import GetMe from "../common/GetTweets";
+import { GetMe, GetProfileImage } from "../common/GetTweets";
+import TwitterAPIController from "../common/APIControllers/TwitterAPIController";
 
 function HomeScreen(props) {
-  GetMe();
+  var TwitterAPI = new TwitterAPIController();
+  TwitterAPI.GetRequest();
+
+  //GetProfileImage().then((Profile) => console.log(Profile));
+
   return (
     <ScrollView>
       <SocialPost

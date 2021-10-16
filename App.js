@@ -12,7 +12,7 @@ import HomeScreen from "./app/screens/HomeScreen";
 
 export default function App() {
   console.log("App has been executed");
-  StoreAuthKey();
+  //StoreAuthKey();
   return (
     <View style={styles.container}>
       <HomeScreen />
