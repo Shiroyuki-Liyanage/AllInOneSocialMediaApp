@@ -11,8 +11,8 @@ class SocialPostManager {
     return this.Accounts;
   }
 
-  requestContent() {
-    this.APIManager.requestContent(this.Accounts.getAccounts());
+  async requestContent() {
+    return await this.APIManager.requestContent(this.Accounts.getAccounts());
   }
 }
 

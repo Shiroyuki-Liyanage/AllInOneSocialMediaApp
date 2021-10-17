@@ -29,6 +29,8 @@ class APIControllerManager {
           break;
       }
     }
+
+    return Content;
   }
 }
 

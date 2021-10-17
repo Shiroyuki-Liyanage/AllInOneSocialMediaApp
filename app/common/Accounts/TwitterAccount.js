@@ -30,13 +30,14 @@ class TwitterAccount extends Account {
       userFollows = JSON.parse(userFollows);
     }
 
+    //Gets 5 followers from user followers list (TO BE CHANGE)
     for (var follow in userFollows.data) {
       if (Object.keys(this.FollowedAccounts).length >= 5) {
         return this.FollowedAccounts;
       }
       this.FollowedAccounts[userFollows.data[follow].id] =
         userFollows.data[follow];
-      console.log(userFollows.data[follow]);
+      //console.log(userFollows.data[follow]);
     }
   }
 

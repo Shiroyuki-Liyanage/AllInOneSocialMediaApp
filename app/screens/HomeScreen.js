@@ -12,18 +12,35 @@ import SocialPostManager from "../common/SocialPostManager";
 import TwitterAccount from "../common/Accounts/TwitterAccount";
 import { AccountType } from "../common/Accounts/AccountType";
 
-function HomeScreen(props) {
-  var PostManager = new SocialPostManager();
-  PostManager.GetAccounts().addAccount(
-    new TwitterAccount("2401655624", AccountType.TWITTER)
-  );
+class HomeScreen extends React.Component {
+  state = {
+    socialPost: {},
+  };
 
-  PostManager.requestContent();
+  constructor() {
+    super();
+    this.PostManager = new SocialPostManager();
+  }
 
-  //GetProfileImage().then((Profile) => console.log(Profile));
+  componentDidMount() {
+    this.PostManager.GetAccounts().addAccount(
+      new TwitterAccount("2401655624", AccountType.TWITTER)
+    );
 
-  return (
-    <ScrollView>
+    this.GetSocialPost();
+  }
+
+  async GetSocialPost() {
+    var Content = await this.PostManager.requestContent();
+    console.log(Content);
+    this.setState({ socialPost: Content });
+  }
+
+  CreateSocialPosts(socialPost) {
+    //var Content = await PostManager.requestContent();
+    console.log(socialPost);
+
+    return (
       <SocialPost
         firstName={"Gus"}
         lastName={"Buckets"}
@@ -32,8 +49,13 @@ function HomeScreen(props) {
           "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut sed quam aarcu ornare mattis nec ac tortor. "
         }
       />
-    </ScrollView>
-  );
+    );
+  }
+
+  render() {
+    let { socialPost } = this.state;
+    return <ScrollView>{this.CreateSocialPosts(socialPost)}</ScrollView>;
+  }
 }
 
 const styles = StyleSheet.create({});

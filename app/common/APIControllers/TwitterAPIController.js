@@ -11,6 +11,8 @@ class TwitterAPIController extends APIController {
       account.getAccountID()
     );
     //console.log(Profile);
+
+    return await this.GetAccountFollowsTweet(requestOptions, account);
   }
 
   /**
@@ -85,6 +87,39 @@ class TwitterAPIController extends APIController {
         "https://api.twitter.com/2/users/" +
           id +
           "/following?user.fields=created_at&tweet.fields=created_at",
+        requestOptions
+      ).catch((error) => console.log("error", error));
+
+      return await response.json();
+    } catch (error) {
+      return null;
+    }
+  }
+
+  async GetAccountFollowsTweet(requestOptions, account) {
+    var Content = {};
+    for (var followID in account.GetAccountFollows()) {
+      Content[followID] = await this.GetTweets(requestOptions, followID);
+    }
+    return Content;
+  }
+
+  /**
+   * Retrieve recent tweets from an account
+   * @param {object} requestOptions
+   * @param {string} id
+   * @returns
+   */
+  async GetTweets(requestOptions, id) {
+    //Maximum amount of tweets that can be retrieved from account
+    const Max_Tweet_Results = 5;
+
+    try {
+      let response = await fetch(
+        "https://api.twitter.com/2/users/" +
+          id +
+          "/tweets?max_results=" +
+          Max_Tweet_Results,
         requestOptions
       ).catch((error) => console.log("error", error));
 
