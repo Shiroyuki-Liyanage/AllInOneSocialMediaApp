@@ -4,14 +4,13 @@ import { GetTwitterAuthKey } from "../StoreAuthKey";
 
 class TwitterAPIController extends APIController {
   async GetRequest(account) {
-    console.log(":)");
     var requestOptions = await this.SetUpRequest();
 
     let Profile = await this.GetAdvanceUserInfo(
       requestOptions,
       account.getAccountID()
     );
-    console.log(Profile);
+    //console.log(Profile);
   }
 
   /**
@@ -38,8 +37,8 @@ class TwitterAPIController extends APIController {
 
   /**
    * Get basic User info with ID
-   * @param {*} requestOptions, Request parameters for auth
-   * @param {*} id, user's Id
+   * @param {object} requestOptions, Request parameters for auth
+   * @param {string} id, account's Id
    * @returns
    */
   async GetBasicUserInfo(requestOptions, id) {
@@ -57,14 +56,35 @@ class TwitterAPIController extends APIController {
 
   /**
    * Get advance user info with id
-   * @param {*} requestOptions
-   * @param {*} id
+   * @param {object} requestOptions, Request parameters for auth
+   * @param {string} id, account's Id
    * @returns
    */
   async GetAdvanceUserInfo(requestOptions, id) {
     try {
       let response = await fetch(
         "https://api.twitter.com/1.1/users/show.json?user_id=" + id,
+        requestOptions
+      ).catch((error) => console.log("error", error));
+
+      return await response.json();
+    } catch (error) {
+      return null;
+    }
+  }
+
+  /**
+   * Request user's follows
+   * @param {string} id , account's Id
+   * @returns
+   */
+  async GetAccountFollows(id) {
+    var requestOptions = await this.SetUpRequest();
+    try {
+      let response = await fetch(
+        "https://api.twitter.com/2/users/" +
+          id +
+          "/following?user.fields=created_at&tweet.fields=created_at",
         requestOptions
       ).catch((error) => console.log("error", error));
 

@@ -14,7 +14,6 @@ class APIControllerManager {
   async requestContent(accounts) {
     var Content = {};
     for (var accountID in accounts) {
-      console.log(accounts[accountID]);
       switch (accounts[accountID].getAccountType()) {
         case AccountType.TWITTER:
           Content[accountID] = await this.TwitterAPI.GetRequest(
