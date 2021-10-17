@@ -63,6 +63,10 @@ class TwitterAPIController extends APIController {
    * @returns
    */
   async GetAdvanceUserInfo(requestOptions, id) {
+    if (requestOptions === null) {
+      requestOptions = await this.SetUpRequest();
+    }
+
     try {
       let response = await fetch(
         "https://api.twitter.com/1.1/users/show.json?user_id=" + id,

@@ -9,12 +9,12 @@ class SocialPost extends Component {
           <View>
             <Image
               style={styles.profileImg}
-              source={require("../../assets/icon.png")}
+              source={{ uri: this.props.imageURL }}
             />
           </View>
           <View>
             <Text style={styles.displayName}>
-              {this.props.firstName} {this.props.lastName}
+              {this.props.name}
               <Text style={styles.username}> @{this.props.username}</Text>
             </Text>
             <Text style={styles.body}>{this.props.body}</Text>
@@ -77,6 +77,7 @@ const styles = StyleSheet.create({
   },
   linkBtn: {
     flex: 1,
+    backgroundColor: "black",
   },
   commentBtn: {
     flex: 1,

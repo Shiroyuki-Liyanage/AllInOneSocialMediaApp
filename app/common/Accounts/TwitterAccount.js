@@ -11,7 +11,15 @@ class TwitterAccount extends Account {
     super(accountID, accountType);
     this.FollowedAccounts = {};
     this.MaxFollowAccounts = 5;
-    this.GetStoredAccountFollows();
+  }
+
+  /**
+   * Initializes Account with necessary info from API call
+   * @returns TwitterAccount
+   */
+  async InitializeAccount() {
+    await this.GetStoredAccountFollows();
+    return this;
   }
 
   /**
@@ -32,12 +40,12 @@ class TwitterAccount extends Account {
 
     //Gets 5 followers from user followers list (TO BE CHANGE)
     for (var follow in userFollows.data) {
-      if (Object.keys(this.FollowedAccounts).length >= 5) {
+      if (Object.keys(this.FollowedAccounts).length >= this.MaxFollowAccounts) {
         return this.FollowedAccounts;
       }
+
       this.FollowedAccounts[userFollows.data[follow].id] =
-        userFollows.data[follow];
-      //console.log(userFollows.data[follow]);
+        await this.RequestDetailTwitterFollow(userFollows.data[follow].id);
     }
   }
 
@@ -46,12 +54,20 @@ class TwitterAccount extends Account {
    * @returns userFollows
    */
   async RequestTwitterAccountFollows() {
-    console.log("Call API");
-    var twitterAPI = new TwitterAPIController();
+    let twitterAPI = new TwitterAPIController();
     try {
-      var userFollows = await twitterAPI.GetAccountFollows(this.accountID);
+      let userFollows = await twitterAPI.GetAccountFollows(this.accountID);
       await StoreAccountTwitterFollows(this.accountID, userFollows);
       return userFollows;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async RequestDetailTwitterFollow(followerID) {
+    let twitterAPI = new TwitterAPIController();
+    try {
+      return await twitterAPI.GetAdvanceUserInfo(null, followerID);
     } catch (error) {
       console.log(error);
     }

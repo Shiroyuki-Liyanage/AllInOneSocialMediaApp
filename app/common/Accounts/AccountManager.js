@@ -3,11 +3,25 @@ class AccountManager {
     this.Accounts = {};
   }
 
-  getAccounts() {
+  GetAccountType(accountID) {
+    if (!(accountID in this.Accounts)) {
+      return null;
+    }
+    return this.Accounts[accountID].accountType;
+  }
+
+  GetAccount(accountID) {
+    if (!(accountID in this.Accounts)) {
+      return null;
+    }
+    return this.Accounts[accountID];
+  }
+
+  GetAccounts() {
     return this.Accounts;
   }
 
-  addAccount(account) {
+  AddAccount(account) {
     this.Accounts[account.accountID] = account;
   }
 }

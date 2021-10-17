@@ -12,6 +12,8 @@ import SocialPostManager from "../common/SocialPostManager";
 import TwitterAccount from "../common/Accounts/TwitterAccount";
 import { AccountType } from "../common/Accounts/AccountType";
 
+import { CreateTwitterSocialPosts } from "../common/SocialPosts/CreateTwitterSocialPosts";
+
 class HomeScreen extends React.Component {
   state = {
     socialPost: {},
@@ -22,34 +24,54 @@ class HomeScreen extends React.Component {
     this.PostManager = new SocialPostManager();
   }
 
-  componentDidMount() {
-    this.PostManager.GetAccounts().addAccount(
-      new TwitterAccount("2401655624", AccountType.TWITTER)
+  async componentDidMount() {
+    this.PostManager.GetAccountManager().AddAccount(
+      await new TwitterAccount(
+        "2401655624",
+        AccountType.TWITTER
+      ).InitializeAccount()
     );
 
-    this.GetSocialPost();
+    this.GetSocialPosts();
   }
 
-  async GetSocialPost() {
+  /**
+   * Get recent social media posts from all linked accounts
+   */
+  async GetSocialPosts() {
     var Content = await this.PostManager.requestContent();
-    console.log(Content);
     this.setState({ socialPost: Content });
   }
 
-  CreateSocialPosts(socialPost) {
-    //var Content = await PostManager.requestContent();
-    console.log(socialPost);
+  CreateSocialPosts(socialPosts) {
+    //If no content then don't display anything
+    if (Object.keys(socialPosts).length <= 0) {
+      return;
+    }
 
-    return (
-      <SocialPost
-        firstName={"Gus"}
-        lastName={"Buckets"}
-        username={"GusBuckets"}
-        body={
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut sed quam aarcu ornare mattis nec ac tortor. "
-        }
-      />
-    );
+    //var Content = await PostManager.requestContent();
+    //console.log(socialPosts);
+    var Content = [];
+    for (var AccountID in socialPosts) {
+      switch (this.PostManager.GetAccountManager().GetAccountType(AccountID)) {
+        case AccountType.TWITTER:
+          Content = CreateTwitterSocialPosts(
+            this.PostManager.GetAccountManager().GetAccount(AccountID),
+            socialPosts[AccountID],
+            Content
+          );
+
+          break;
+        case AccountType.REDDIT:
+          break;
+        case AccountType.FACEBOOK:
+          break;
+      }
+    }
+
+    console.log(Content);
+
+    return Content;
   }
 
   render() {
