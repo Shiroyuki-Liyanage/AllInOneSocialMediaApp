@@ -5,81 +5,76 @@ import {
   SafeAreaView,
   StyleSheet,
   ScrollView,
+  RefreshControl,
 } from "react-native";
-import SocialPost from "./components/SocialPost";
 
-import SocialPostManager from "../common/SocialPostManager";
-import TwitterAccount from "../common/Accounts/TwitterAccount";
-import { AccountType } from "../common/Accounts/AccountType";
-
-import { CreateTwitterSocialPosts } from "../common/SocialPosts/CreateTwitterSocialPosts";
+import Presenter from "./Presenter";
 
 class HomeScreen extends React.Component {
   state = {
     socialPost: {},
+    refreshing: false,
   };
 
   constructor() {
     super();
-    this.PostManager = new SocialPostManager();
+    this.Presenter = new Presenter(this);
   }
 
   async componentDidMount() {
-    this.PostManager.GetAccountManager().AddAccount(
-      await new TwitterAccount(
-        "2401655624",
-        AccountType.TWITTER
-      ).InitializeAccount()
-    );
-
-    this.GetSocialPosts();
+    // this.PostManager.GetAccountManager().AddAccount(
+    //   await new TwitterAccount(
+    //     "2401655624",
+    //     AccountType.TWITTER
+    //   ).InitializeAccount()
+    // );
+    //this.GetSocialPosts();
   }
 
   /**
    * Get recent social media posts from all linked accounts
    */
   async GetSocialPosts() {
-    var Content = await this.PostManager.requestContent();
-    this.setState({ socialPost: Content });
+    this.setState({ refreshing: true });
+    var Content = await this.Presenter.RefreshSocialMediaPosts();
+    this.setState({ socialPost: Content, refreshing: false });
+    return true;
   }
 
   CreateSocialPosts(socialPosts) {
-    //If no content then don't display anything
-    if (Object.keys(socialPosts).length <= 0) {
-      return;
-    }
-
-    //var Content = await PostManager.requestContent();
-    //console.log(socialPosts);
-    var Content = [];
-    for (var AccountID in socialPosts) {
-      switch (this.PostManager.GetAccountManager().GetAccountType(AccountID)) {
-        case AccountType.TWITTER:
-          Content = CreateTwitterSocialPosts(
-            this.PostManager.GetAccountManager().GetAccount(AccountID),
-            socialPosts[AccountID],
-            Content
-          );
-
-          break;
-        case AccountType.REDDIT:
-          break;
-        case AccountType.FACEBOOK:
-          break;
-      }
-    }
-
-    console.log(Content);
-
-    return Content;
+    return this.Presenter.CreateSocialPosts(socialPosts);
   }
 
   render() {
-    let { socialPost } = this.state;
-    return <ScrollView>{this.CreateSocialPosts(socialPost)}</ScrollView>;
+    let { socialPost, refreshing } = this.state;
+    return (
+      <View style={styles.container}>
+        <ScrollView
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={() => {
+                this.GetSocialPosts();
+              }}
+            />
+          }
+        >
+          {this.CreateSocialPosts(socialPost)}
+        </ScrollView>
+      </View>
+    );
   }
 }
 
-const styles = StyleSheet.create({});
+//
+//   <HomeScreen />
+// </View>
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "black",
+  },
+});
 
 export default HomeScreen;

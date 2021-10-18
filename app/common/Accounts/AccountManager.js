@@ -21,8 +21,8 @@ class AccountManager {
     return this.Accounts;
   }
 
-  AddAccount(account) {
-    this.Accounts[account.accountID] = account;
+  async AddAccount(account) {
+    this.Accounts[account.accountID] = await account;
   }
 }
 
