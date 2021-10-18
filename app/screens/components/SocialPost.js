@@ -82,13 +82,11 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     paddingRight: 10,
     flexWrap: "wrap",
-    flex: 0.3,
     height: "100%",
   },
   username: {
     color: "#696969",
     flexWrap: "wrap",
-    flex: 0.7,
     height: "100%",
   },
   body: {

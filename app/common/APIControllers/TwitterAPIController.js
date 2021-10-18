@@ -4,7 +4,7 @@ import { GetTwitterAuthKey } from "../StoreAuthKey";
 
 class TwitterAPIController extends APIController {
   async GetRequest(account) {
-    var requestOptions = await this.SetUpRequest();
+    var requestOptions = this.SetUpRequest();
 
     let Profile = await this.GetAdvanceUserInfo(
       requestOptions,
@@ -19,10 +19,10 @@ class TwitterAPIController extends APIController {
    * Set up request headers and authentication
    * @returns RequestOptions Headers for the request and Authentication
    */
-  async SetUpRequest() {
+  SetUpRequest() {
     var myHeaders = new Headers();
 
-    var AuthToken = await GetTwitterAuthKey();
+    var AuthToken = GetTwitterAuthKey();
 
     myHeaders.append("Authorization", "Bearer " + AuthToken);
     myHeaders.append(
@@ -64,7 +64,7 @@ class TwitterAPIController extends APIController {
    */
   async GetAdvanceUserInfo(requestOptions, id) {
     if (requestOptions === null) {
-      requestOptions = await this.SetUpRequest();
+      requestOptions = this.SetUpRequest();
     }
 
     try {
@@ -85,7 +85,7 @@ class TwitterAPIController extends APIController {
    * @returns
    */
   async GetAccountFollows(id) {
-    var requestOptions = await this.SetUpRequest();
+    var requestOptions = this.SetUpRequest();
     try {
       let response = await fetch(
         "https://api.twitter.com/2/users/" +

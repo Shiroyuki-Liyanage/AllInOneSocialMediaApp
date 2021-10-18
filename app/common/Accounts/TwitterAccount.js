@@ -30,8 +30,9 @@ class TwitterAccount extends Account {
     //First checks if followers already stored in the app
     var userFollows = await GetsAccountTwitterFollows(this.accountID);
 
-    //If not, request from twitter API
     if (userFollows === null) {
+      userFollows = await this.RequestTwitterAccountFollows();
+    } else if (userFollows["title"] == "Unauthorized") {
       userFollows = await this.RequestTwitterAccountFollows();
     } else {
       //Convert the store data to Json Object

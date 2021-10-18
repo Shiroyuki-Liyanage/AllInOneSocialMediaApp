@@ -16,9 +16,9 @@ class APIControllerManager {
     for (var accountID in accounts) {
       switch (accounts[accountID].getAccountType()) {
         case AccountType.TWITTER:
-          // Content[accountID] = await this.TwitterAPI.GetRequest(
-          //   accounts[accountID]
-          // );
+          Content[accountID] = await this.TwitterAPI.GetRequest(
+            accounts[accountID]
+          );
           break;
         case AccountType.REDDIT:
           break;
