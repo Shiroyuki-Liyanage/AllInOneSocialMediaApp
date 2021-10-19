@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
     backgroundColor: "black",
     width: "100%",
     minHeight: 100,
-    flex: -1,
+    flex: 1,
     borderBottomWidth: 1,
     borderTopWidth: 1,
     borderBottomColor: "#343434",

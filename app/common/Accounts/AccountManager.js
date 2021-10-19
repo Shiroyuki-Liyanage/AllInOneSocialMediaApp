@@ -17,6 +17,10 @@ class AccountManager {
     return this.Accounts[accountID];
   }
 
+  CheckAccountExist(accountID) {
+    return this.GetAccount(accountID) !== null;
+  }
+
   GetAccounts() {
     return this.Accounts;
   }

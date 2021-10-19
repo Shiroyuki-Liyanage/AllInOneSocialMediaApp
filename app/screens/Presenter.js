@@ -7,22 +7,26 @@ import { AccountType } from "../common/Accounts/AccountType";
 import { CreateTwitterSocialPosts } from "../common/SocialPosts/CreateTwitterSocialPosts";
 
 import ContentModel from "./ContentModel";
+import React from "react";
+import { Text } from "react-native";
 
 class Presenter {
   constructor(homeScreen) {
     this.ContentModel = new ContentModel();
     this.HomeScreen = homeScreen;
 
-    this.AddAccount();
+    //this.AddAccount();
   }
 
   /**
    * Add Account
    */
-  async AddAccount() {
-    await this.ContentModel.AddAccount();
+  async AddAccount(accounts) {
+    let isNewAccount = await this.ContentModel.AddAccount(accounts);
     //Refresh posts
-    this.HomeScreen.GetSocialPosts();
+    //this.HomeScreen.GetSocialPosts();
+    this.RefreshSocialMediaPosts();
+    return isNewAccount;
   }
 
   /**
@@ -40,7 +44,7 @@ class Presenter {
   CreateSocialPosts(socialPosts) {
     //If no content then don't display anything
     if (Object.keys(socialPosts).length <= 0) {
-      return;
+      return [];
     }
 
     var Content = [];

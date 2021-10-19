@@ -12,14 +12,29 @@ class ContentModel {
     this.PostManager = new SocialPostManager();
   }
 
-  async AddAccount() {
-    await this.PostManager.GetAccountManager().AddAccount(
-      await new TwitterAccount(
-        "2401655624",
-        AccountType.TWITTER
-      ).InitializeAccount()
-    );
-    return true;
+  async AddAccount(accounts) {
+    // await this.PostManager.GetAccountManager().AddAccount(
+    //   await new TwitterAccount(
+    //     "2401655624",
+    //     AccountType.TWITTER
+    //   ).InitializeAccount()
+    // );
+    for (var index in accounts) {
+      if (
+        !this.PostManager.GetAccountManager().CheckAccountExist(accounts[index])
+      ) {
+        console.log(accounts[index]);
+        await this.PostManager.GetAccountManager().AddAccount(
+          await new TwitterAccount(
+            accounts[index],
+            AccountType.TWITTER
+          ).InitializeAccount()
+        );
+        return true;
+      }
+    }
+
+    return false;
   }
 
   /**

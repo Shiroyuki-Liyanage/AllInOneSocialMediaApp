@@ -1,10 +1,110 @@
 import * as React from "react";
-import { View, Text } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Button,
+  TextInput,
+  Image,
+  Alert,
+  Keyboard,
+} from "react-native";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { checkAccount } from "../reduxScripts/Actions/AccountActions";
+import { twitter } from "../assets/icon.png";
+import TwitterAPIController from "../common/APIControllers/TwitterAPIController";
 
-export default function TwitterLoginPage() {
-  return (
-    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-      <Text style={{ fontSize: 16, fontWeight: "700" }}>Twitter Screen</Text>
-    </View>
-  );
+class TwitterLoginPage extends React.Component {
+  state = {
+    username: "Yuki_Liyanage",
+  };
+
+  constructor() {
+    super();
+    this.TwitterAPI = new TwitterAPIController();
+  }
+
+  async CheckValidTwitterAccount() {
+    console.log(this.state.username);
+
+    var user = await this.TwitterAPI.GetUserByUsername(
+      null,
+      this.state.username
+    );
+
+    //If user cannot be found
+    if ("errors" in user) {
+      Alert.alert("Error! :(", "User " + this.state.username + " Not Found!");
+      return;
+    }
+
+    Keyboard.dismiss();
+    this.props.checkAccount(user.data.id);
+
+    this.props.navigation.navigate("Home");
+  }
+
+  render() {
+    return (
+      <View style={styles.container}>
+        <Image source={twitter} style={{ width: 50, height: 50 }} />
+        <Text style={styles.Text}>Link Twitter Account</Text>
+
+        <TextInput
+          style={styles.input}
+          placeholder="Enter Account Username"
+          value={this.state.username}
+          onChangeText={(username) => this.setState({ username })}
+        />
+
+        <Button
+          title="Link Account"
+          onPress={() => {
+            this.CheckValidTwitterAccount();
+          }}
+        />
+      </View>
+    );
+  }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "black",
+    paddingLeft: 20,
+    paddingRight: 20,
+  },
+  input: {
+    height: 40,
+    marginTop: 12,
+    marginBottom: 12,
+    borderWidth: 1,
+    padding: 10,
+    backgroundColor: "white",
+    width: "100%",
+  },
+  Text: {
+    color: "white",
+    paddingTop: 50,
+    textAlign: "left",
+    fontWeight: "bold",
+    fontSize: 30,
+  },
+});
+
+const mapStateToProps = (state) => {
+  const { accounts } = state;
+  return { accounts };
+};
+
+const mapDispatchToProps = (dispatch) =>
+  bindActionCreators(
+    {
+      checkAccount,
+    },
+    dispatch
+  );
+
+export default connect(mapStateToProps, mapDispatchToProps)(TwitterLoginPage);

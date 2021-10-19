@@ -132,6 +132,23 @@ class TwitterAPIController extends APIController {
       return null;
     }
   }
+
+  async GetUserByUsername(requestOptions, username) {
+    if (requestOptions === null) {
+      requestOptions = this.SetUpRequest();
+    }
+
+    try {
+      let response = await fetch(
+        "https://api.twitter.com/2/users/by/username/" + username,
+        requestOptions
+      ).catch((error) => console.log("error", error));
+
+      return await response.json();
+    } catch (error) {
+      return null;
+    }
+  }
 }
 
 export default TwitterAPIController;

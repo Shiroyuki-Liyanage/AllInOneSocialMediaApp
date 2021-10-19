@@ -7,8 +7,13 @@ export const StoreAccountTwitterFollows = async (accountID, data) => {
   }
 };
 
-export const GetsAccountTwitterFollows = async (accountID) => {
+export const GetsAccountTwitterFollows = async (accountID, update) => {
   try {
+    if (typeof update !== "undefined") {
+      await AsyncStorage.removeItem(accountID);
+      console.log("Removed");
+      return null;
+    }
     var res = await AsyncStorage.getItem(accountID);
     return res;
   } catch (error) {

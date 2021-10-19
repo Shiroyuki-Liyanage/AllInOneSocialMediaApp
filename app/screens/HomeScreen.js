@@ -6,11 +6,12 @@ import {
   StyleSheet,
   ScrollView,
   RefreshControl,
+  Text,
 } from "react-native";
 
 import Presenter from "./Presenter";
-import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { connect } from "react-redux";
 
 const Tab = createBottomTabNavigator();
 
@@ -25,15 +26,7 @@ class HomeScreen extends React.Component {
     this.Presenter = new Presenter(this);
   }
 
-  async componentDidMount() {
-    // this.PostManager.GetAccountManager().AddAccount(
-    //   await new TwitterAccount(
-    //     "2401655624",
-    //     AccountType.TWITTER
-    //   ).InitializeAccount()
-    // );
-    //this.GetSocialPosts();
-  }
+  componentDidMount() {}
 
   /**
    * Get recent social media posts from all linked accounts
@@ -46,13 +39,34 @@ class HomeScreen extends React.Component {
   }
 
   CreateSocialPosts(socialPosts) {
-    return this.Presenter.CreateSocialPosts(socialPosts);
+    var content = this.Presenter.CreateSocialPosts(socialPosts);
+
+    return content.length > 0
+      ? content
+      : [<Text key={"re"}>All goals are selected</Text>];
+  }
+
+  async UpdateAccounts(accounts) {
+    if (accounts.length > 0) {
+      let isNewAccount = await this.Presenter.AddAccount(accounts);
+      if (isNewAccount) {
+        console.log(isNewAccount);
+        this.GetSocialPosts();
+      }
+    }
   }
 
   render() {
     let { socialPost, refreshing } = this.state;
+    // if (isUpdate) {
+    this.UpdateAccounts(this.props.accounts.account);
+    // }
+
     return (
       <View style={styles.container}>
+        {/* <Text style={{ color: "white" }}>
+          You have {this.props.accounts.account[0]} friends.
+        </Text> */}
         <ScrollView
           refreshControl={
             <RefreshControl
@@ -70,10 +84,6 @@ class HomeScreen extends React.Component {
   }
 }
 
-//
-//   <HomeScreen />
-// </View>
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -81,4 +91,9 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HomeScreen;
+const mapStateToProps = (state) => {
+  const { accounts } = state;
+  return { accounts };
+};
+
+export default connect(mapStateToProps)(HomeScreen);
