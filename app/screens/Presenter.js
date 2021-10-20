@@ -71,7 +71,7 @@ class Presenter {
       }
     }
 
-    console.log(Content);
+    //console.log(Content);
 
     return Content;
   }

@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { checkAccount } from "../reduxScripts/Actions/AccountActions";
+import { AddTwitterAccount } from "../reduxScripts/Actions/AccountActions";
 import { twitter } from "../assets/icon.png";
 import TwitterAPIController from "../common/APIControllers/TwitterAPIController";
 
@@ -40,7 +40,7 @@ class TwitterLoginPage extends React.Component {
     }
 
     Keyboard.dismiss();
-    this.props.checkAccount(user.data.id);
+    this.props.addTwitterAccount(user.data.id);
 
     this.props.navigation.navigate("Home");
   }
@@ -102,7 +102,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) =>
   bindActionCreators(
     {
-      checkAccount,
+      addTwitterAccount: AddTwitterAccount,
     },
     dispatch
   );

@@ -123,7 +123,8 @@ class TwitterAPIController extends APIController {
         "https://api.twitter.com/2/users/" +
           id +
           "/tweets?max_results=" +
-          Max_Tweet_Results,
+          Max_Tweet_Results +
+          "&tweet.fields=created_at",
         requestOptions
       ).catch((error) => console.log("error", error));
 

@@ -43,7 +43,7 @@ class HomeScreen extends React.Component {
 
     return content.length > 0
       ? content
-      : [<Text key={"re"}>All goals are selected</Text>];
+      : [<Text key={"NoPosts"}>No posts... :(</Text>];
   }
 
   async UpdateAccounts(accounts) {
@@ -59,7 +59,7 @@ class HomeScreen extends React.Component {
   render() {
     let { socialPost, refreshing } = this.state;
     // if (isUpdate) {
-    this.UpdateAccounts(this.props.accounts.account);
+    this.UpdateAccounts(this.props.accounts.twitterAccounts);
     // }
 
     return (

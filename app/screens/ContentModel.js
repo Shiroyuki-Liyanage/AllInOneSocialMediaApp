@@ -13,12 +13,6 @@ class ContentModel {
   }
 
   async AddAccount(accounts) {
-    // await this.PostManager.GetAccountManager().AddAccount(
-    //   await new TwitterAccount(
-    //     "2401655624",
-    //     AccountType.TWITTER
-    //   ).InitializeAccount()
-    // );
     for (var index in accounts) {
       if (
         !this.PostManager.GetAccountManager().CheckAccountExist(accounts[index])

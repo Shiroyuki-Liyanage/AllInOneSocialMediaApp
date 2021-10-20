@@ -25,6 +25,10 @@ const Drawer = createDrawerNavigator();
 const store = createStore(AccountReducer);
 
 class App extends React.Component {
+  constructor() {
+    super();
+  }
+
   render() {
     console.log("App has been executed");
 
@@ -38,27 +42,13 @@ class App extends React.Component {
             <Drawer.Screen
               name="Twitter Login Page"
               component={TwitterLoginPage}
+              options={{ test: "hello" }}
             />
           </Drawer.Navigator>
         </NavigationContainer>
       </Provider>
     );
   }
-
-  // temp() {
-  //   const filteredProps = {
-  //     ...props,
-  //     state: {
-  //       ...this.props.state,
-  //       routeNames: this.props.state.routeNames.filter((routeName) => {
-  //         routeName !== "HiddenPage1" && routeName !== "HiddenPage2";
-  //       }),
-  //       routes: this.props.state.routes.filter((route) => {
-  //         route.name !== "HiddenPage1" && route.name !== "HiddenPage2";
-  //       }),
-  //     },
-  //   };
-  // }
 }
 
 export default App;

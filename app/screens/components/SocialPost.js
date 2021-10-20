@@ -6,6 +6,18 @@ class SocialPost extends Component {
   render() {
     return (
       <View style={styles.FullPost}>
+        <View
+          style={{
+            flexDirection: "row",
+            minheight: 10,
+            width: "100%",
+            justifyContent: "flex-end",
+          }}
+        >
+          <Text style={{ textAlign: "right", padding: 5, color: "grey" }}>
+            {this.props.created_at}
+          </Text>
+        </View>
         <View style={styles.topPost}>
           <View
             style={{
@@ -88,6 +100,13 @@ const styles = StyleSheet.create({
     color: "#696969",
     flexWrap: "wrap",
     height: "100%",
+  },
+  date: {
+    color: "#696969",
+    flexWrap: "wrap",
+    height: "100%",
+    textAlign: "right",
+    padding: 5,
   },
   body: {
     color: "white",
