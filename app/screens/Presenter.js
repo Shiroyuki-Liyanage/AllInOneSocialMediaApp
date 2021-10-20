@@ -5,6 +5,7 @@ import TwitterAccount from "../common/Accounts/TwitterAccount";
 import { AccountType } from "../common/Accounts/AccountType";
 
 import { CreateTwitterSocialPosts } from "../common/SocialPosts/CreateTwitterSocialPosts";
+import { CreateRedditSocialPosts } from "../common/SocialPosts/CreateRedditSocialPost";
 
 import ContentModel from "./ContentModel";
 import React from "react";
@@ -21,8 +22,16 @@ class Presenter {
   /**
    * Add Account
    */
-  async AddAccount(accounts) {
-    let isNewAccount = await this.ContentModel.AddAccount(accounts);
+  async AddTwitterAccount(accounts) {
+    let isNewAccount = await this.ContentModel.AddTwitterAccount(accounts);
+    //Refresh posts
+    //this.HomeScreen.GetSocialPosts();
+    this.RefreshSocialMediaPosts();
+    return isNewAccount;
+  }
+
+  async AddRedditAccount(accounts) {
+    let isNewAccount = await this.ContentModel.AddRedditAccount(accounts);
     //Refresh posts
     //this.HomeScreen.GetSocialPosts();
     this.RefreshSocialMediaPosts();
@@ -55,16 +64,22 @@ class Presenter {
           .GetAccountType(AccountID)
       ) {
         case AccountType.TWITTER:
-          Content = CreateTwitterSocialPosts(
+          CreateTwitterSocialPosts(
             this.ContentModel.GetPostManager()
               .GetAccountManager()
               .GetAccount(AccountID),
             socialPosts[AccountID],
             Content
           );
-
           break;
         case AccountType.REDDIT:
+          CreateRedditSocialPosts(
+            this.ContentModel.GetPostManager()
+              .GetAccountManager()
+              .GetAccount(AccountID),
+            socialPosts[AccountID],
+            Content
+          );
           break;
         case AccountType.FACEBOOK:
           break;

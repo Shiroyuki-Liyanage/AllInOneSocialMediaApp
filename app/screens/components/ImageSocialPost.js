@@ -6,17 +6,12 @@ import {
   Image,
   Button,
   Pressable,
-  Linking,
   TouchableWithoutFeedback,
 } from "react-native";
 import { Icon } from "react-native-elements";
+import SocialPost from "./SocialPost";
 
-class SocialPost extends React.Component {
-  GoToPostLink(url) {
-    console.log(":)");
-    Linking.openURL(url);
-  }
-
+class ImageSocialPost extends SocialPost {
   render() {
     return (
       <View style={styles.FullPost}>
@@ -56,6 +51,10 @@ class SocialPost extends React.Component {
               <Text style={styles.username}> @{this.props.username}</Text>
             </View>
             <Text style={styles.body}>{this.props.body}</Text>
+            <Image
+              style={styles.thumbnailImg}
+              source={{ uri: this.props.thumbnail }}
+            />
           </View>
         </View>
         <View
@@ -76,6 +75,7 @@ class SocialPost extends React.Component {
                 name="link-variant"
                 type="material-community"
                 color="white"
+                styles={{ height: 20, width: 20 }}
               />
             </TouchableWithoutFeedback>
           </View>
@@ -143,6 +143,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 10,
   },
+  thumbnailImg: {
+    height: 200,
+    maxHeight: 200,
+    width: "100%",
+    borderRadius: 5,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 10,
+  },
   bottomPost: {
     backgroundColor: "white",
     flex: 1,
@@ -168,4 +177,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SocialPost;
+export default ImageSocialPost;

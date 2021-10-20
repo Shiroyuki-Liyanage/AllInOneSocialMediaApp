@@ -11,9 +11,12 @@ class AccountManager {
   }
 
   GetAccount(accountID) {
+    console.log(accountID);
     if (!(accountID in this.Accounts)) {
       return null;
     }
+    console.log(this.Accounts[accountID]);
+
     return this.Accounts[accountID];
   }
 

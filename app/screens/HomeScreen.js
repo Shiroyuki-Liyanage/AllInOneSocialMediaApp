@@ -46,11 +46,21 @@ class HomeScreen extends React.Component {
       : [<Text key={"NoPosts"}>No posts... :(</Text>];
   }
 
-  async UpdateAccounts(accounts) {
+  async UpdateTwitterAccounts(accounts) {
+    //console.log(accounts);
     if (accounts.length > 0) {
-      let isNewAccount = await this.Presenter.AddAccount(accounts);
+      let isNewAccount = await this.Presenter.AddTwitterAccount(accounts);
       if (isNewAccount) {
-        console.log(isNewAccount);
+        this.GetSocialPosts();
+      }
+    }
+  }
+
+  async UpdateRedditAccounts(accounts) {
+    //console.log(accounts);
+    if (accounts.length > 0) {
+      let isNewAccount = await this.Presenter.AddRedditAccount(accounts);
+      if (isNewAccount) {
         this.GetSocialPosts();
       }
     }
@@ -59,7 +69,8 @@ class HomeScreen extends React.Component {
   render() {
     let { socialPost, refreshing } = this.state;
     // if (isUpdate) {
-    this.UpdateAccounts(this.props.accounts.twitterAccounts);
+    this.UpdateTwitterAccounts(this.props.accounts.twitterAccounts);
+    this.UpdateRedditAccounts(this.props.accounts.redditAccounts);
     // }
 
     return (

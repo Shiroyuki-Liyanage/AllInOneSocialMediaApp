@@ -21,6 +21,9 @@ class APIControllerManager {
           );
           break;
         case AccountType.REDDIT:
+          Content[accountID] = await this.RedditAPI.GetRequest(
+            accounts[accountID]
+          );
           break;
         case AccountType.FACEBOOK:
           break;

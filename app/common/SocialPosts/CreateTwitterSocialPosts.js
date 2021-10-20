@@ -55,6 +55,11 @@ const CreateTwitterSocialPost = (twitterAccount, twitterPost, content) => {
       body={twitterPost.text}
       imageURL={twitterAccount.profile_image_url}
       created_at={twitterPost.created_at}
+      post_url={GetTwitterURL(twitterAccount.screen_name, twitterPost.id)}
     />
   );
+};
+
+const GetTwitterURL = (accountName, tweetID) => {
+  return "https://twitter.com/" + accountName + "/status/" + tweetID;
 };

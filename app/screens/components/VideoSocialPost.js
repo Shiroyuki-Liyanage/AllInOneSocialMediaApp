@@ -10,13 +10,9 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 import { Icon } from "react-native-elements";
+import SocialPost from "./SocialPost";
 
-class SocialPost extends React.Component {
-  GoToPostLink(url) {
-    console.log(":)");
-    Linking.openURL(url);
-  }
-
+class VideoSocialPost extends SocialPost {
   render() {
     return (
       <View style={styles.FullPost}>
@@ -56,6 +52,21 @@ class SocialPost extends React.Component {
               <Text style={styles.username}> @{this.props.username}</Text>
             </View>
             <Text style={styles.body}>{this.props.body}</Text>
+            <TouchableWithoutFeedback
+              onPress={() => {
+                this.GoToPostLink(this.props.video_link);
+              }}
+            >
+              <View style={styles.thumbnail}>
+                <Image
+                  style={styles.thumbnailImg}
+                  source={{ uri: this.props.thumbnail }}
+                />
+                <Text style={styles.thumbnailText}>
+                  {"Video Link: " + this.props.video_link}
+                </Text>
+              </View>
+            </TouchableWithoutFeedback>
           </View>
         </View>
         <View
@@ -143,6 +154,29 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 10,
   },
+  thumbnail: {
+    flex: 1,
+    flexDirection: "row",
+    height: 100,
+    backgroundColor: "#003850",
+    borderRadius: 5,
+  },
+  thumbnailImg: {
+    height: 100,
+    flex: 0.3,
+    borderRadius: 5,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 10,
+  },
+  thumbnailText: {
+    flex: 0.7,
+    borderRadius: 5,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 10,
+    color: "white",
+  },
   bottomPost: {
     backgroundColor: "white",
     flex: 1,
@@ -168,4 +202,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SocialPost;
+export default VideoSocialPost;

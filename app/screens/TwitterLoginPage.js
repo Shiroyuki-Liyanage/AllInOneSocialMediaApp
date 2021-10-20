@@ -26,8 +26,6 @@ class TwitterLoginPage extends React.Component {
   }
 
   async CheckValidTwitterAccount() {
-    console.log(this.state.username);
-
     var user = await this.TwitterAPI.GetUserByUsername(
       null,
       this.state.username
