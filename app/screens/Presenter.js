@@ -1,5 +1,3 @@
-import SocialPost from "./components/SocialPost";
-
 import SocialPostManager from "../common/SocialPostManager";
 import TwitterAccount from "../common/Accounts/TwitterAccount";
 import { AccountType } from "../common/Accounts/AccountType";
@@ -7,9 +5,17 @@ import { AccountType } from "../common/Accounts/AccountType";
 import { CreateTwitterSocialPosts } from "../common/SocialPosts/CreateTwitterSocialPosts";
 import { CreateRedditSocialPosts } from "../common/SocialPosts/CreateRedditSocialPost";
 
+import SocialPost from "./components/SocialPost";
+import ImageSocialPost from "./components/ImageSocialPost";
+import VideoSocialPost from "./components/VideoSocialPost";
+import ArticleSocialPost from "./components/ArticleSocialPost";
+
 import ContentModel from "./ContentModel";
 import React from "react";
 import { Text } from "react-native";
+
+const reddit = require("../assets/Reddit.png");
+const twitter = require("../assets/Twitter.png");
 
 class Presenter {
   constructor(homeScreen) {
@@ -86,9 +92,102 @@ class Presenter {
       }
     }
 
-    //console.log(Content);
+    //Sort content
+    var sortedContent = Content.sort(
+      (a, b) => Date.parse(b.created_at) - Date.parse(a.created_at)
+    );
 
-    return Content;
+    var ComponentContent = [];
+    for (var contentIndex in sortedContent) {
+      if (sortedContent[contentIndex].type == "SocialPost") {
+        this.CreateComponentSocialPost(
+          sortedContent[contentIndex],
+          ComponentContent
+        );
+      } else if (sortedContent[contentIndex].type == "ArticleSocialPost") {
+        this.CreateComponentArticleSocialPost(
+          sortedContent[contentIndex],
+          ComponentContent
+        );
+      } else if (sortedContent[contentIndex].type == "VideoSocialPost") {
+        this.CreateComponentVideoSocialPost(
+          sortedContent[contentIndex],
+          ComponentContent
+        );
+      } else if (sortedContent[contentIndex].type == "ImageSocialPost") {
+        this.CreateComponentImageSocialPost(
+          sortedContent[contentIndex],
+          ComponentContent
+        );
+      }
+    }
+
+    return ComponentContent;
+  }
+
+  CreateComponentArticleSocialPost(post, content) {
+    content.push(
+      <ArticleSocialPost
+        key={post.key}
+        name={post.name}
+        username={post.username}
+        body={post.body}
+        imageURL={post.imageURL}
+        created_at={post.created_at}
+        thumbnail={post.thumbnail}
+        article_link={post.article_link}
+        post_url={post.post_url}
+        post_type={post.post_type}
+      />
+    );
+  }
+
+  CreateComponentVideoSocialPost(post, content) {
+    content.push(
+      <VideoSocialPost
+        key={post.key}
+        name={post.name}
+        username={post.username}
+        body={post.body}
+        imageURL={post.imageURL}
+        created_at={post.created_at}
+        thumbnail={post.thumbnail}
+        video_link={post.video_link}
+        post_url={post.post_url}
+        post_type={post.post_type}
+      />
+    );
+  }
+
+  CreateComponentImageSocialPost(post, content) {
+    content.push(
+      <ImageSocialPost
+        key={post.key}
+        name={post.name}
+        username={post.username}
+        body={post.body}
+        imageURL={post.imageURL}
+        created_at={post.created_at}
+        thumbnail={post.thumbnail}
+        post_url={post.post_url}
+        post_type={post.post_type}
+      />
+    );
+  }
+
+  CreateComponentSocialPost(post, content) {
+    content.push(
+      <SocialPost
+        key={post.key}
+        name={post.name}
+        username={post.username}
+        body={post.body}
+        imageURL={post.imageURL}
+        created_at={post.created_at}
+        post_url={post.post_url}
+        post_type={post.post_type}
+      />
+    );
   }
 }
 

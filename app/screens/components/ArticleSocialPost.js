@@ -6,6 +6,7 @@ import {
   Image,
   Button,
   Pressable,
+  Linking,
   TouchableWithoutFeedback,
 } from "react-native";
 import { Icon } from "react-native-elements";
@@ -14,7 +15,7 @@ import SocialPost from "./SocialPost";
 const reddit = require("../../assets/Reddit.png");
 const twitter = require("../../assets/Twitter.png");
 
-class ImageSocialPost extends SocialPost {
+class ArticleSocialPost extends SocialPost {
   render() {
     return (
       <View style={styles.FullPost}>
@@ -58,10 +59,21 @@ class ImageSocialPost extends SocialPost {
               <Text style={styles.username}> @{this.props.username}</Text>
             </View>
             <Text style={styles.body}>{this.props.body}</Text>
-            <Image
-              style={styles.thumbnailImg}
-              source={{ uri: this.props.thumbnail }}
-            />
+            <TouchableWithoutFeedback
+              onPress={() => {
+                this.GoToPostLink(this.props.article_link);
+              }}
+            >
+              <View style={styles.thumbnail}>
+                <Image
+                  style={styles.thumbnailImg}
+                  source={{ uri: this.props.thumbnail }}
+                />
+                <Text style={styles.thumbnailText}>
+                  {"Article Link: " + this.props.article_link}
+                </Text>
+              </View>
+            </TouchableWithoutFeedback>
           </View>
         </View>
         <View
@@ -82,7 +94,6 @@ class ImageSocialPost extends SocialPost {
                 name="link-variant"
                 type="material-community"
                 color="white"
-                styles={{ height: 20, width: 20 }}
               />
             </TouchableWithoutFeedback>
           </View>
@@ -150,14 +161,28 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 10,
   },
+  thumbnail: {
+    flex: 1,
+    flexDirection: "row",
+    height: 100,
+    backgroundColor: "#003850",
+    borderRadius: 5,
+  },
   thumbnailImg: {
-    height: 200,
-    maxHeight: 200,
-    width: "100%",
+    height: 100,
+    flex: 0.3,
     borderRadius: 5,
     justifyContent: "center",
     alignItems: "center",
     padding: 10,
+  },
+  thumbnailText: {
+    flex: 0.7,
+    borderRadius: 5,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 10,
+    color: "white",
   },
   bottomPost: {
     backgroundColor: "white",
@@ -184,4 +209,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ImageSocialPost;
+export default ArticleSocialPost;

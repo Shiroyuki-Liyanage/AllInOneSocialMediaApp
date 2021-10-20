@@ -11,10 +11,20 @@ import {
 } from "react-native";
 import { Icon } from "react-native-elements";
 
+const reddit = require("../../assets/Reddit.png");
+const twitter = require("../../assets/Twitter.png");
+
 class SocialPost extends React.Component {
   GoToPostLink(url) {
-    console.log(":)");
     Linking.openURL(url);
+  }
+
+  GetLogo(logoName) {
+    if (logoName == "Twitter") {
+      return twitter;
+    } else if (logoName == "Reddit") {
+      return reddit;
+    }
   }
 
   render() {
@@ -31,6 +41,10 @@ class SocialPost extends React.Component {
           <Text style={{ textAlign: "right", padding: 5, color: "grey" }}>
             {this.props.created_at}
           </Text>
+          <Image
+            style={styles.profileImg}
+            source={this.GetLogo(this.props.post_type)}
+          />
         </View>
         <View style={styles.topPost}>
           <View

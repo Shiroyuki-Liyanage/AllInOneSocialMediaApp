@@ -1,6 +1,7 @@
 import SocialPost from "../../screens/components/SocialPost";
 import ImageSocialPost from "../../screens/components/ImageSocialPost";
 import VideoSocialPost from "../../screens/components/VideoSocialPost";
+import ArticleSocialPost from "../../screens/components/ArticleSocialPost";
 import React from "react";
 
 export const CreateRedditSocialPosts = (account, accountData, content) => {
@@ -20,9 +21,20 @@ export const CreateRedditSocialPosts = (account, accountData, content) => {
         accountData.data.children[postIndex].data,
         content
       );
-    } else {
+    } else if (
+      CheckValidImageURL(
+        accountData.data.children[postIndex].data.url_overridden_by_dest
+      )
+    ) {
       //Reddit post with image element
       CreateRedditImageSocialPost(
+        account,
+        accountData.data.children[postIndex].data,
+        content
+      );
+    } else {
+      //Reddit post with article links
+      CreateRedditArticleSocialPost(
         account,
         accountData.data.children[postIndex].data,
         content
@@ -31,49 +43,65 @@ export const CreateRedditSocialPosts = (account, accountData, content) => {
   }
 };
 
+const CreateRedditArticleSocialPost = (accountInfo, post, content) => {
+  content.push({
+    type: "ArticleSocialPost",
+    post_type: "reddit",
+    key: post.id,
+    name: post.title,
+    username: "u/" + post.author,
+    body: PostCharacterLimit(post.selftext),
+    imageURL: accountInfo.RedditCommunityData.imageURL,
+    created_at: ConvertUTCToDate(post.created_utc),
+    thumbnail: post.thumbnail,
+    article_link: post.url_overridden_by_dest,
+    post_url: post.url,
+  });
+};
+
 const CreateRedditVideoSocialPost = (accountInfo, post, content) => {
-  content.push(
-    <VideoSocialPost
-      key={post.id}
-      name={post.title}
-      username={"u/" + post.author}
-      body={PostCharacterLimit(post.selftext)}
-      imageURL={accountInfo.RedditCommunityData.imageURL}
-      created_at={ConvertUTCToDate(post.created_utc)}
-      thumbnail={post.thumbnail}
-      video_link={post.url_overridden_by_dest}
-      post_url={post.url}
-    />
-  );
+  content.push({
+    type: "VideoSocialPost",
+    post_type: "reddit",
+    key: post.id,
+    name: post.title,
+    username: "u/" + post.author,
+    body: PostCharacterLimit(post.selftext),
+    imageURL: accountInfo.RedditCommunityData.imageURL,
+    created_at: ConvertUTCToDate(post.created_utc),
+    thumbnail: post.thumbnail,
+    video_link: post.url_overridden_by_dest,
+    post_url: post.url,
+  });
 };
 
 const CreateRedditImageSocialPost = (accountInfo, post, content) => {
-  content.push(
-    <ImageSocialPost
-      key={post.id}
-      name={post.title}
-      username={"u/" + post.author}
-      body={PostCharacterLimit(post.selftext)}
-      imageURL={accountInfo.RedditCommunityData.imageURL}
-      created_at={ConvertUTCToDate(post.created_utc)}
-      thumbnail={post.url_overridden_by_dest}
-      post_url={post.url}
-    />
-  );
+  content.push({
+    type: "ImageSocialPost",
+    post_type: "reddit",
+    key: post.id,
+    name: post.title,
+    username: "u/" + post.author,
+    body: PostCharacterLimit(post.selftext),
+    imageURL: accountInfo.RedditCommunityData.imageURL,
+    created_at: ConvertUTCToDate(post.created_utc),
+    thumbnail: post.url_overridden_by_dest,
+    post_url: post.url,
+  });
 };
 
 const CreateRedditSocialPost = (accountInfo, post, content) => {
-  content.push(
-    <SocialPost
-      key={post.id}
-      name={post.title}
-      username={"u/" + post.author}
-      body={PostCharacterLimit(post.selftext)}
-      imageURL={accountInfo.RedditCommunityData.imageURL}
-      created_at={ConvertUTCToDate(post.created_utc)}
-      post_url={post.url}
-    />
-  );
+  content.push({
+    type: "SocialPost",
+    post_type: "reddit",
+    key: post.id,
+    name: post.title,
+    username: "u/" + post.author,
+    body: PostCharacterLimit(post.selftext),
+    imageURL: accountInfo.RedditCommunityData.imageURL,
+    created_at: ConvertUTCToDate(post.created_utc),
+    post_url: post.url,
+  });
 };
 
 const ConvertUTCToDate = (date) => {
@@ -87,6 +115,10 @@ const PostCharacterLimit = (text) => {
     limitText = text.substring(0, 280) + "...";
   }
   return limitText;
+};
+
+const CheckValidImageURL = (url) => {
+  return url.match(/\.(jpeg|jpg|gif|png)$/) != null;
 };
 
 //Check if post links to an article!!!

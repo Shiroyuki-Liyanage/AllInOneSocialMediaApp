@@ -12,6 +12,9 @@ import {
 import { Icon } from "react-native-elements";
 import SocialPost from "./SocialPost";
 
+const reddit = require("../../assets/Reddit.png");
+const twitter = require("../../assets/Twitter.png");
+
 class VideoSocialPost extends SocialPost {
   render() {
     return (
@@ -27,6 +30,10 @@ class VideoSocialPost extends SocialPost {
           <Text style={{ textAlign: "right", padding: 5, color: "grey" }}>
             {this.props.created_at}
           </Text>
+          <Image
+            style={styles.profileImg}
+            source={this.GetLogo(this.props.post_type)}
+          />
         </View>
         <View style={styles.topPost}>
           <View

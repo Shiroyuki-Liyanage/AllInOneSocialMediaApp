@@ -15,7 +15,7 @@ import {
   AddRedditAccount,
   AddTwitterAccount,
 } from "../reduxScripts/Actions/AccountActions";
-import { twitter } from "../assets/icon.png";
+const reddit = require("../assets/Reddit.png");
 import TwitterAPIController from "../common/APIControllers/TwitterAPIController";
 
 class RedditLoginPage extends React.Component {
@@ -39,7 +39,16 @@ class RedditLoginPage extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Image source={twitter} style={{ width: 50, height: 50 }} />
+        <View
+          style={{
+            width: "100%",
+            justifyContent: "flex-end",
+            flexDirection: "row",
+          }}
+        >
+          <Image source={reddit} style={styles.image} />
+        </View>
+
         <Text style={styles.Text}>Link Reddit Community</Text>
 
         <TextInput
@@ -67,6 +76,11 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     paddingRight: 20,
   },
+  image: {
+    width: 90,
+    height: 90,
+    justifyContent: "flex-end",
+  },
   input: {
     height: 40,
     marginTop: 12,
@@ -84,7 +98,6 @@ const styles = StyleSheet.create({
     fontSize: 30,
   },
 });
-
 const mapStateToProps = (state) => {
   const { accounts } = state;
   return { accounts };
