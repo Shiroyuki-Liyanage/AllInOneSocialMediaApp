@@ -1,0 +1,2 @@
+export const ADD_FRIEND = "ADD_FRIEND";
+export const ADD_TWITTER_ACCOUNT = "ADD_TWITTER_ACCOUNT";

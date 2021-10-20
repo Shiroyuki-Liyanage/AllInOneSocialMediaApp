@@ -1,28 +1,67 @@
 // import { StatusBar } from "expo-status-bar";
-import React from "react";
+import * as React from "react";
 import { View, StyleSheet, Platform, StatusBar } from "react-native";
 
-// import {
-//   useDimensions,
-//   useDeviceOrientation,
-// } from "@react-native-community/hooks";
-
 import HomeScreen from "./app/screens/HomeScreen";
+import TwitterLoginPage from "./app/screens/TwitterLoginPage";
+import RedditLoginPage from "./app/screens/RedditLoginPage";
+import LinkNewAccountPage from "./app/screens/LinkNewAccountPage";
+import AccountsPage from "./app/screens/AccountsPage";
 
-export default function App() {
-  console.log("App executed");
+import { createDrawerNavigator } from "@react-navigation/drawer";
+import { NavigationContainer } from "@react-navigation/native";
 
-  return (
-    <View style={styles.container}>
-      <HomeScreen />
-    </View>
-  );
+import { DefaultTheme, DarkTheme } from "@react-navigation/native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+
+import { Provider } from "react-redux";
+import { createStore } from "redux";
+
+import AccountReducer from "./app/reduxScripts/Reducers/AccountReducer";
+import AccountManager from "./app/common/Accounts/AccountManager";
+
+
+const Drawer = createDrawerNavigator();
+
+const store = createStore(AccountReducer);
+
+class App extends React.Component {
+  constructor() {
+    super();
+  }
+
+  render() {
+    console.log("App has been executed");
+
+    return (
+      <Provider store={store}>
+        <NavigationContainer theme={MyTheme}>
+          <Drawer.Navigator initialRouteName="Home">
+            <Drawer.Screen name="Home" component={HomeScreen} />
+            <Drawer.Screen name="Linked Accounts" component={AccountsPage} />
+
+            <Drawer.Screen
+              name="Twitter Login Page"
+              component={TwitterLoginPage}
+              options={{ test: "hello" }}
+            />
+          </Drawer.Navigator>
+        </NavigationContainer>
+      </Provider>
+    );
+  }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "black",
-    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+export default App;
+
+const MyTheme = {
+  dark: true,
+  colors: {
+    primary: "rgb(255, 255, 255)",
+    background: "rgb(255, 255, 255)",
+    card: "rgb(0, 38, 50)",
+    text: "rgb(255, 255, 255)",
+    border: "rgb(255, 255, 255)",
+    notification: "rgb(255, 255, 255)",
   },
-});
+};
