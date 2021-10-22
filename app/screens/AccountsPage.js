@@ -84,7 +84,7 @@ class AccountsPage extends React.Component {
   }
 
   CreateTwitterAccountComponent(account) {
-    console.log(account);
+    //console.log(account);
     return (
       <AccountComponent
         key={account.accountID}
@@ -98,7 +98,7 @@ class AccountsPage extends React.Component {
   }
 
   CreateRedditAccountComponent(account) {
-    console.log(account);
+    //console.log(account);
     return (
       <AccountComponent
         key={account.accountID}

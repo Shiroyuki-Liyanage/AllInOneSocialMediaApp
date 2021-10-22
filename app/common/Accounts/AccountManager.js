@@ -33,6 +33,7 @@ class AccountManager {
   }
 
   RemoveAccountByID(accountID) {
+    console.log("*******************Removing: " + accountID);
     delete this.Accounts[accountID];
   }
 

@@ -41,6 +41,8 @@ const accountsReducer = (state = INITIAL_STATE, action) => {
       return state;
   }
 
+  console.log(updatedTwitterAccounts);
+
   return {
     twitterAccounts: updatedTwitterAccounts,
     redditAccounts: updatedRedditAccounts,
@@ -49,9 +51,11 @@ const accountsReducer = (state = INITIAL_STATE, action) => {
 
 const RemoveAccount = (twitterAccounts, redditAccounts, action) => {
   var accountID = action.payload;
+
   for (var accountIndex in twitterAccounts) {
     if (twitterAccounts[accountIndex] == accountID) {
       twitterAccounts.splice(accountIndex, 1);
+      console.log(twitterAccounts);
       return {
         redditAccounts: redditAccounts,
         twitterAccounts: twitterAccounts,
@@ -92,7 +96,6 @@ const UpdateAccounts = (twitterAccounts, redditAccounts, action) => {
 
 const AddTwitterAccount = (twitterAccounts, action) => {
   var accountID = action.payload;
-  var newState = {};
   //Check if twitter account exist
   for (var accountIndex in twitterAccounts) {
     if (twitterAccounts[accountIndex] == accountID) {

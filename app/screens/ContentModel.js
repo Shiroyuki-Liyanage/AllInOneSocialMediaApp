@@ -30,26 +30,28 @@ class ContentModel {
           accounts[index],
           AccountType.TWITTER
         ).InitializeAccount();
+
         await this.PostManager.GetAccountManager().AddAccount(NewAccount);
         this.StoreAccountInfo(NewAccount);
         updated = true;
       }
     }
-
+    console.log("I'm Going to murder you");
     /**
      * Delete account in post manager if redux store does not have it.
      */
     for (var accountID in this.PostManager.GetAccounts()) {
-      console.log(accountID);
       if (
         this.PostManager.GetAccountManager().GetAccountType(accountID) !=
         "Twitter"
       ) {
         continue;
       }
-      console.log("Twitter========================");
+      console.log("LOOOOOOOOOOOOOOOOOOOOOOK");
+      console.log(reduxTwitterAccount);
+      console.log(accountID);
       if (!(accountID in reduxTwitterAccount)) {
-        console.log(accountID);
+        console.log("AHHHHHHHHHHHHHHHHHHH");
         this.PostManager.GetAccountManager().RemoveAccountByID(accountID);
         updated = true;
       }
@@ -90,7 +92,6 @@ class ContentModel {
       ) {
         continue;
       }
-      console.log("Reddit========================");
       if (!(accountID in reduxRedditAccounts)) {
         this.PostManager.GetAccountManager().RemoveAccountByID(accountID);
         updated = true;
@@ -221,11 +222,11 @@ class ContentModel {
       var accounts = await AsyncStorage.getItem("Accounts");
       console.log("Question?");
       accounts = JSON.parse(accounts);
-      console.log(accounts);
+      //console.log(accounts);
       for (var index in accounts) {
         if (accounts[index] == accountID) {
           accounts.splice(index, 1);
-          console.log(accounts);
+          //console.log(accounts);
           await AsyncStorage.setItem("Accounts", JSON.stringify(accounts));
           return true;
         }

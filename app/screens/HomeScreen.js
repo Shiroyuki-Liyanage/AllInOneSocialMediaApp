@@ -43,8 +43,6 @@ class HomeScreen extends React.Component {
   async GetSocialPosts() {
     this.setState({ refreshing: true });
     var Content = await this.Presenter.RefreshSocialMediaPosts();
-    console.log("Hello");
-    console.log(Object.keys(this.Presenter.GetAccounts()));
     this.setState({ socialPost: Content, refreshing: false });
     return true;
   }
@@ -86,6 +84,8 @@ class HomeScreen extends React.Component {
     // if (isUpdate) {
 
     // }
+    console.log(this.props.accounts);
+
     this.UpdateRedditAccounts(this.props.accounts.redditAccounts);
     this.UpdateTwitterAccounts(this.props.accounts.twitterAccounts);
 
