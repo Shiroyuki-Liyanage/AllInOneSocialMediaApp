@@ -32,7 +32,7 @@ class APIControllerManager {
           break;
       }
     }
-
+    //console.log(Content);
     return Content;
   }
 }

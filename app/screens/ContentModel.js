@@ -14,14 +14,14 @@ class ContentModel {
   }
 
   async AddTwitterAccount(accounts) {
-    var reduxAccount = {};
+    var reduxTwitterAccount = {};
     let updated = false;
 
     /**
-     * Add account to post manager if reduc store has a account
+     * Add account to post manager if redux store has a account
      */
     for (var index in accounts) {
-      reduxAccount[accounts[index]] = accounts[index];
+      reduxTwitterAccount[accounts[index]] = accounts[index];
       if (
         !this.PostManager.GetAccountManager().CheckAccountExist(accounts[index])
       ) {
@@ -40,7 +40,16 @@ class ContentModel {
      * Delete account in post manager if redux store does not have it.
      */
     for (var accountID in this.PostManager.GetAccounts()) {
-      if (!(accountID in reduxAccount)) {
+      console.log(accountID);
+      if (
+        this.PostManager.GetAccountManager().GetAccountType(accountID) !=
+        "Twitter"
+      ) {
+        continue;
+      }
+      console.log("Twitter========================");
+      if (!(accountID in reduxTwitterAccount)) {
+        console.log(accountID);
         this.PostManager.GetAccountManager().RemoveAccountByID(accountID);
         updated = true;
       }
@@ -50,11 +59,11 @@ class ContentModel {
   }
 
   async AddRedditAccount(accounts) {
-    var reduxAccount = {};
+    var reduxRedditAccounts = {};
     let updated = false;
 
     for (var index in accounts) {
-      reduxAccount[accounts[index]] = accounts[index];
+      reduxRedditAccounts[accounts[index]] = accounts[index];
       if (
         !this.PostManager.GetAccountManager().CheckAccountExist(accounts[index])
       ) {
@@ -75,8 +84,14 @@ class ContentModel {
      * Delete account in post manager if redux store does not have it.
      */
     for (var accountID in this.PostManager.GetAccounts()) {
-      if (!(accountID in reduxAccount)) {
-        console.log("Delete");
+      if (
+        this.PostManager.GetAccountManager().GetAccountType(accountID) !=
+        "Reddit"
+      ) {
+        continue;
+      }
+      console.log("Reddit========================");
+      if (!(accountID in reduxRedditAccounts)) {
         this.PostManager.GetAccountManager().RemoveAccountByID(accountID);
         updated = true;
       }
@@ -88,7 +103,16 @@ class ContentModel {
   async StoreAccountInfo(account) {
     try {
       var Accounts = await this.GetStoredAccounts();
-      Accounts.push(account.accountID);
+      let AddAccount = true;
+      for (var accountIndex in Accounts) {
+        if (Accounts[accountIndex] == account.accountID) {
+          AddAccount = false;
+        }
+      }
+      if (AddAccount) {
+        Accounts.push(account.accountID);
+      }
+
       await AsyncStorage.setItem("Accounts", JSON.stringify(Accounts));
       await AsyncStorage.setItem(account.accountID, JSON.stringify(account));
     } catch (error) {
