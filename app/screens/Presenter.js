@@ -22,7 +22,7 @@ class Presenter {
   constructor(attachedScreen) {
     this.ContentModel = new ContentModel();
     this.AttachedScreen = attachedScreen;
-
+    this.Initialize = false;
     this.GetAllStoredAccountInfo();
   }
 
@@ -31,12 +31,26 @@ class Presenter {
   }
 
   async GetAllStoredAccountInfo() {
-    await this.ContentModel.GetAllStoredAccountInfo();
-    this.AttachedScreen.Refresh();
+    var Updated = await this.ContentModel.GetAllStoredAccountInfo();
+    if (Updated == true) {
+      console.log(Updated);
+      this.AttachedScreen.Refresh(true);
+    }
+
+    if (!this.Initialize) {
+      this.Initialize = false;
+      this.AttachedScreen.Refresh(true);
+    }
   }
 
   async GetStoredAccountByID(accountID) {
     return await this.ContentModel.GetStoredAccount(accountID);
+  }
+
+  async RemoveAccount(accountID) {
+    var res = await this.ContentModel.RemoveStoredAccount(accountID);
+    this.AttachedScreen.Refresh();
+    return res;
   }
 
   /**
@@ -202,6 +216,12 @@ class Presenter {
         post_type={post.post_type}
       />
     );
+  }
+
+  async ClearAccounts() {
+    console.log(this.ContentModel);
+
+    return await this.ContentModel.ClearAccounts();
   }
 }
 

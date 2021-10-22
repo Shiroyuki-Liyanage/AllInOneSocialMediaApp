@@ -31,6 +31,23 @@ class AccountManager {
   async AddAccount(account) {
     this.Accounts[account.accountID] = await account;
   }
+
+  RemoveAccountByID(accountID) {
+    delete this.Accounts[accountID];
+  }
+
+  ClearAccounts() {
+    this.Accounts = {};
+  }
+
+  IsSame(newAccountManager) {
+    for (var accountID in newAccountManager.GetAccounts()) {
+      if (!(accountID in this.Accounts)) {
+        return false;
+      }
+    }
+    return true;
+  }
 }
 
 export default AccountManager;

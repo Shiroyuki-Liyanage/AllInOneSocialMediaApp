@@ -3,6 +3,7 @@ import {
   ADD_TWITTER_ACCOUNT,
   ADD_REDDIT_ACCOUNT,
   UPDATE_ACCOUNTS,
+  REMOVE_ACCOUNTS,
 } from "../Types/types";
 
 export const addFriend = (friendsIndex) => ({
@@ -23,4 +24,9 @@ export const AddRedditAccount = (accountID) => ({
 export const UpdateAccounts = (accounts) => ({
   type: UPDATE_ACCOUNTS,
   payload: accounts,
+});
+
+export const RemoveAccount = (accountID) => ({
+  type: REMOVE_ACCOUNTS,
+  payload: accountID,
 });

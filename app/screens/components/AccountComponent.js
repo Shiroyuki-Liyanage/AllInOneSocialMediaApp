@@ -14,9 +14,14 @@ import { Icon } from "react-native-elements";
 const reddit = require("../../assets/Reddit.png");
 const twitter = require("../../assets/Twitter.png");
 
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { RemoveAccount } from "../../reduxScripts/Actions/AccountActions";
+
 class AccountComponent extends React.Component {
-  GoToPostLink(url) {
-    Linking.openURL(url);
+  async RemoveAccount(accountID, presenter) {
+    this.props.removeAccount(accountID);
+    await presenter.RemoveAccount(accountID);
   }
 
   GetLogo(logoName) {
@@ -83,18 +88,18 @@ class AccountComponent extends React.Component {
           }}
         >
           <View style={{ backgroundColor: "transparent", flex: 0.5 }}>
-            <TouchableWithoutFeedback
-              id="Link"
-              style={styles.postButton}
-              onPress={() => {
-                this.GoToPostLink(this.props.post_url);
-              }}
-            >
+            <TouchableWithoutFeedback id="Settings" style={styles.postButton}>
               <Icon name="tune" type="material-community" color="white" />
             </TouchableWithoutFeedback>
           </View>
           <View style={{ backgroundColor: "transparent", flex: 0.5 }}>
-            <TouchableWithoutFeedback id="Comment" style={styles.postButton}>
+            <TouchableWithoutFeedback
+              id="RemoveAccount"
+              style={styles.postButton}
+              onPress={() => {
+                this.RemoveAccount(this.props.accountID, this.props.presenter);
+              }}
+            >
               <Icon
                 name="delete-forever"
                 type="material-community"
@@ -195,4 +200,18 @@ const styles = StyleSheet.create({
     color: "white",
   },
 });
-export default AccountComponent;
+
+const mapStateToProps = (state) => {
+  const { accounts } = state;
+  return { accounts };
+};
+
+const mapDispatchToProps = (dispatch) =>
+  bindActionCreators(
+    {
+      removeAccount: RemoveAccount,
+    },
+    dispatch
+  );
+
+export default connect(mapStateToProps, mapDispatchToProps)(AccountComponent);

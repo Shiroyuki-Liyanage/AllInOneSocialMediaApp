@@ -5,6 +5,7 @@ import {
   ADD_REDDIT_ACCOUNT,
   ADD_TWITTER_ACCOUNT,
   UPDATE_ACCOUNTS,
+  REMOVE_ACCOUNTS,
 } from "../Types/types";
 
 const INITIAL_STATE = {
@@ -16,6 +17,9 @@ const accountsReducer = (state = INITIAL_STATE, action) => {
   const { twitterAccounts, redditAccounts } = state;
   let updatedTwitterAccounts = twitterAccounts;
   let updatedRedditAccounts = redditAccounts;
+
+  let accounts = {};
+
   switch (action.type) {
     case ADD_TWITTER_ACCOUNT:
       updatedTwitterAccounts = AddTwitterAccount(twitterAccounts, action);
@@ -24,7 +28,12 @@ const accountsReducer = (state = INITIAL_STATE, action) => {
       updatedRedditAccounts = AddRedditAccount(redditAccounts, action);
       break;
     case UPDATE_ACCOUNTS:
-      let accounts = UpdateAccounts(twitterAccounts, redditAccounts, action);
+      accounts = UpdateAccounts(twitterAccounts, redditAccounts, action);
+      updatedTwitterAccounts = accounts.twitterAccounts;
+      updatedRedditAccounts = accounts.redditAccounts;
+      break;
+    case REMOVE_ACCOUNTS:
+      accounts = RemoveAccount(twitterAccounts, redditAccounts, action);
       updatedTwitterAccounts = accounts.twitterAccounts;
       updatedRedditAccounts = accounts.redditAccounts;
       break;
@@ -36,6 +45,29 @@ const accountsReducer = (state = INITIAL_STATE, action) => {
     twitterAccounts: updatedTwitterAccounts,
     redditAccounts: updatedRedditAccounts,
   };
+};
+
+const RemoveAccount = (twitterAccounts, redditAccounts, action) => {
+  var accountID = action.payload;
+  for (var accountIndex in twitterAccounts) {
+    if (twitterAccounts[accountIndex] == accountID) {
+      twitterAccounts.splice(accountIndex, 1);
+      return {
+        redditAccounts: redditAccounts,
+        twitterAccounts: twitterAccounts,
+      };
+    }
+  }
+
+  for (var accountIndex in redditAccounts) {
+    if (redditAccounts[accountIndex] == accountID) {
+      redditAccounts.splice(accountIndex, 1);
+      return {
+        redditAccounts: redditAccounts,
+        twitterAccounts: twitterAccounts,
+      };
+    }
+  }
 };
 
 const UpdateAccounts = (twitterAccounts, redditAccounts, action) => {

@@ -7,6 +7,7 @@ import {
   ScrollView,
   RefreshControl,
   Text,
+  Button,
 } from "react-native";
 
 import Presenter from "./Presenter";
@@ -27,8 +28,11 @@ class AccountsPage extends React.Component {
     refreshing: false,
   };
 
-  Refresh() {
-    this.props.updateAccounts(this.Presenter.GetAccounts());
+  Refresh(Update) {
+    if (typeof Update != "undefined") {
+      this.props.updateAccounts(this.Presenter.GetAccounts());
+    }
+
     this.GetAccounts();
   }
 
@@ -64,12 +68,16 @@ class AccountsPage extends React.Component {
 
   CreateAccountCommponents(accounts) {
     var Content = [];
-    for (var index in accounts) {
-      if (accounts[index].accountType == "Twitter") {
-        Content.push(this.CreateTwitterAccountComponent(accounts[index]));
-      } else if (accounts[index].accountType == "Reddit") {
-        Content.push(this.CreateRedditAccountComponent(accounts[index]));
+    try {
+      for (var index in accounts) {
+        if (accounts[index].accountType == "Twitter") {
+          Content.push(this.CreateTwitterAccountComponent(accounts[index]));
+        } else if (accounts[index].accountType == "Reddit") {
+          Content.push(this.CreateRedditAccountComponent(accounts[index]));
+        }
       }
+    } catch (error) {
+      return Content;
     }
 
     return Content;
@@ -83,6 +91,8 @@ class AccountsPage extends React.Component {
         name={account.UserData.name}
         username={account.UserData.screen_name}
         profile_image_url={account.UserData.profile_image_url_https}
+        presenter={this.Presenter}
+        accountID={account.accountID}
       />
     );
   }
@@ -95,15 +105,29 @@ class AccountsPage extends React.Component {
         name={account.RedditCommunityData.display_name}
         username={account.RedditCommunityData.url}
         profile_image_url={account.RedditCommunityData.imageURL}
+        presenter={this.Presenter}
+        accountID={account.accountID}
       />
     );
   }
 
   render() {
     let { accounts, refreshing } = this.state;
-
+    this.GetAccounts();
     return (
       <View style={styles.container}>
+        <Button
+          title={"Refresh"}
+          onPress={() => {
+            this.GetAccounts();
+          }}
+        />
+        <Button
+          title={"Clear"}
+          onPress={() => {
+            this.Presenter.ClearAccounts();
+          }}
+        />
         <ScrollView>{this.CreateAccountCommponents(accounts)}</ScrollView>
       </View>
     );

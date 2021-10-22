@@ -30,8 +30,10 @@ class HomeScreen extends React.Component {
 
   componentDidMount() {}
 
-  Refresh() {
-    this.props.updateAccounts(this.Presenter.GetAccounts());
+  Refresh(update) {
+    if (typeof update != "undefined") {
+      this.props.updateAccounts(this.Presenter.GetAccounts());
+    }
     this.GetSocialPosts();
   }
 
@@ -57,6 +59,7 @@ class HomeScreen extends React.Component {
     //console.log(accounts);
     if (accounts.length > 0) {
       let isNewAccount = await this.Presenter.AddTwitterAccount(accounts);
+      console.log(isNewAccount);
       if (isNewAccount) {
         this.GetSocialPosts();
       }
@@ -67,6 +70,7 @@ class HomeScreen extends React.Component {
     //console.log(accounts);
     if (accounts.length > 0) {
       let isNewAccount = await this.Presenter.AddRedditAccount(accounts);
+      console.log(isNewAccount);
       if (isNewAccount) {
         this.GetSocialPosts();
       }
@@ -76,9 +80,11 @@ class HomeScreen extends React.Component {
   render() {
     let { socialPost, refreshing } = this.state;
     // if (isUpdate) {
+
+    // }
+
     this.UpdateTwitterAccounts(this.props.accounts.twitterAccounts);
     this.UpdateRedditAccounts(this.props.accounts.redditAccounts);
-    // }
 
     return (
       <View style={styles.container}>

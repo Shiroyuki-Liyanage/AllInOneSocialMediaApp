@@ -14,7 +14,14 @@ class ContentModel {
   }
 
   async AddTwitterAccount(accounts) {
+    var reduxAccount = {};
+    let updated = false;
+
+    /**
+     * Add account to post manager if reduc store has a account
+     */
     for (var index in accounts) {
+      reduxAccount[accounts[index]] = accounts[index];
       if (
         !this.PostManager.GetAccountManager().CheckAccountExist(accounts[index])
       ) {
@@ -25,15 +32,29 @@ class ContentModel {
         ).InitializeAccount();
         await this.PostManager.GetAccountManager().AddAccount(NewAccount);
         this.StoreAccountInfo(NewAccount);
-        return true;
+        updated = true;
       }
     }
 
-    return false;
+    /**
+     * Delete account in post manager if redux store does not have it.
+     */
+    for (var accountID in this.PostManager.GetAccounts()) {
+      if (!(accountID in reduxAccount)) {
+        this.PostManager.GetAccountManager().RemoveAccountByID(accountID);
+        updated = true;
+      }
+    }
+
+    return updated;
   }
 
   async AddRedditAccount(accounts) {
+    var reduxAccount = {};
+    let updated = false;
+
     for (var index in accounts) {
+      reduxAccount[accounts[index]] = accounts[index];
       if (
         !this.PostManager.GetAccountManager().CheckAccountExist(accounts[index])
       ) {
@@ -47,6 +68,17 @@ class ContentModel {
         await this.PostManager.GetAccountManager().AddAccount(NewAccount);
         this.StoreAccountInfo(NewAccount);
         return true;
+      }
+    }
+
+    /**
+     * Delete account in post manager if redux store does not have it.
+     */
+    for (var accountID in this.PostManager.GetAccounts()) {
+      if (!(accountID in reduxAccount)) {
+        console.log("Delete");
+        this.PostManager.GetAccountManager().RemoveAccountByID(accountID);
+        updated = true;
       }
     }
 
@@ -68,6 +100,10 @@ class ContentModel {
    * Get all the stored accounts on phone
    */
   async GetAllStoredAccountInfo() {
+    //await this.ClearAccounts();
+    var PreviousAccountManager = this.PostManager.GetAccountManager();
+
+    this.PostManager.GetAccountManager().ClearAccounts();
     var Accounts = await this.GetStoredAccounts();
     for (var index in Accounts) {
       var storedAccount = await this.GetStoredAccount(Accounts[index]);
@@ -82,11 +118,17 @@ class ContentModel {
       }
     }
 
-    //console.log(this.PostManager.GetAccountManager());
+    return PreviousAccountManager.IsSame(this.PostManager.GetAccountManager());
   }
 
   async ClearAccounts() {
+    console.log("Refreshed");
+    var accounts = await AsyncStorage.getItem("Accounts");
+    accounts = JSON.parse(accounts);
     await AsyncStorage.setItem("Accounts", JSON.stringify([]));
+    for (var index in accounts) {
+      await AsyncStorage.setItem(accounts[index], JSON.stringify(""));
+    }
   }
 
   async CreateTwitterAccount(jsonAccount) {
@@ -147,6 +189,28 @@ class ContentModel {
 
   GetAccounts() {
     return this.PostManager.GetAccounts();
+  }
+
+  async RemoveStoredAccount(accountID) {
+    try {
+      await AsyncStorage.removeItem(accountID);
+      var accounts = await AsyncStorage.getItem("Accounts");
+      console.log("Question?");
+      accounts = JSON.parse(accounts);
+      console.log(accounts);
+      for (var index in accounts) {
+        if (accounts[index] == accountID) {
+          accounts.splice(index, 1);
+          console.log(accounts);
+          await AsyncStorage.setItem("Accounts", JSON.stringify(accounts));
+          return true;
+        }
+      }
+
+      return true;
+    } catch (exception) {
+      return false;
+    }
   }
 }
 
