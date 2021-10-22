@@ -13,16 +13,30 @@ import ArticleSocialPost from "./components/ArticleSocialPost";
 import ContentModel from "./ContentModel";
 import React from "react";
 import { Text } from "react-native";
+import { ThemeConsumer } from "react-native-elements";
 
 const reddit = require("../assets/Reddit.png");
 const twitter = require("../assets/Twitter.png");
 
 class Presenter {
-  constructor(homeScreen) {
+  constructor(attachedScreen) {
     this.ContentModel = new ContentModel();
-    this.HomeScreen = homeScreen;
+    this.AttachedScreen = attachedScreen;
 
-    //this.AddAccount();
+    this.GetAllStoredAccountInfo();
+  }
+
+  GetAccounts() {
+    return this.ContentModel.GetAccounts();
+  }
+
+  async GetAllStoredAccountInfo() {
+    await this.ContentModel.GetAllStoredAccountInfo();
+    this.AttachedScreen.Refresh();
+  }
+
+  async GetStoredAccountByID(accountID) {
+    return await this.ContentModel.GetStoredAccount(accountID);
   }
 
   /**

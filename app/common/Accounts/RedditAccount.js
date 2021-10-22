@@ -1,5 +1,6 @@
 import RedditAPIController from "../APIControllers/RedditAPIController";
 import Account from "./Account";
+import { AccountType } from "./AccountType";
 
 class RedditAccount extends Account {
   constructor(accountID, accountType) {
@@ -7,8 +8,13 @@ class RedditAccount extends Account {
     this.RedditCommunityData = {};
   }
 
-  async InitializeAccount() {
-    await this.GetCommunityData();
+  async InitializeAccount(storedRedditCommunityData) {
+    if (typeof storedRedditCommunityData == "undefined") {
+      await this.GetCommunityData();
+    } else {
+      this.RedditCommunityData = storedRedditCommunityData;
+    }
+
     return this;
   }
 

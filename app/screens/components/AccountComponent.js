@@ -10,12 +10,23 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 import { Icon } from "react-native-elements";
-import SocialPost from "./SocialPost";
 
 const reddit = require("../../assets/Reddit.png");
 const twitter = require("../../assets/Twitter.png");
 
-class VideoSocialPost extends SocialPost {
+class AccountComponent extends React.Component {
+  GoToPostLink(url) {
+    Linking.openURL(url);
+  }
+
+  GetLogo(logoName) {
+    //console.log(logoName);
+    if (logoName == "twitter") {
+      return twitter;
+    } else if (logoName == "reddit") {
+      return reddit;
+    }
+  }
   render() {
     return (
       <View style={styles.FullPost}>
@@ -27,9 +38,6 @@ class VideoSocialPost extends SocialPost {
             justifyContent: "flex-end",
           }}
         >
-          <Text style={{ textAlign: "right", padding: 5, color: "grey" }}>
-            {this.props.created_at}
-          </Text>
           <Image
             style={styles.logoImg}
             source={this.GetLogo(this.props.post_type)}
@@ -45,35 +53,27 @@ class VideoSocialPost extends SocialPost {
           >
             <Image
               style={styles.profileImg}
-              source={{ uri: this.props.imageURL }}
+              source={{ uri: this.props.profile_image_url }}
             />
           </View>
-          <View style={{ backgroundColor: "transparent", flex: 0.8 }}>
+          <View
+            style={{
+              backgroundColor: "transparent",
+              flex: 0.8,
+              justifyContent: "center",
+              paddingleft: 30,
+            }}
+          >
             <View
               style={{
                 flexDirection: "row",
                 width: "100%",
+                backgroundColor: "transparent",
               }}
             >
               <Text style={styles.displayName}>{this.props.name}</Text>
             </View>
             <Text style={styles.username}> {this.props.username}</Text>
-            <Text style={styles.body}>{this.props.body}</Text>
-            <TouchableWithoutFeedback
-              onPress={() => {
-                this.GoToPostLink(this.props.video_link);
-              }}
-            >
-              <View style={styles.thumbnail}>
-                <Image
-                  style={styles.thumbnailImg}
-                  source={{ uri: this.props.thumbnail }}
-                />
-                <Text style={styles.thumbnailText}>
-                  {"Video Link: " + this.props.video_link}
-                </Text>
-              </View>
-            </TouchableWithoutFeedback>
           </View>
         </View>
         <View
@@ -90,16 +90,16 @@ class VideoSocialPost extends SocialPost {
                 this.GoToPostLink(this.props.post_url);
               }}
             >
-              <Icon
-                name="link-variant"
-                type="material-community"
-                color="white"
-              />
+              <Icon name="tune" type="material-community" color="white" />
             </TouchableWithoutFeedback>
           </View>
           <View style={{ backgroundColor: "transparent", flex: 0.5 }}>
             <TouchableWithoutFeedback id="Comment" style={styles.postButton}>
-              <Icon name="comment" type="material-community" color="white" />
+              <Icon
+                name="delete-forever"
+                type="material-community"
+                color="white"
+              />
             </TouchableWithoutFeedback>
           </View>
         </View>
@@ -128,15 +128,17 @@ const styles = StyleSheet.create({
   displayName: {
     color: "white",
     fontWeight: "bold",
-    paddingLeft: 10,
-    paddingRight: 10,
+    paddingLeft: 20,
     flexWrap: "wrap",
     height: "100%",
+    fontSize: 25,
   },
   username: {
     color: "#696969",
     flexWrap: "wrap",
     width: "100%",
+    paddingLeft: 20,
+    fontSize: 15,
   },
   date: {
     color: "#696969",
@@ -154,8 +156,8 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
   },
   profileImg: {
-    height: 45,
-    width: 45,
+    height: 80,
+    width: 80,
     borderRadius: 40,
     justifyContent: "center",
     alignItems: "center",
@@ -164,32 +166,10 @@ const styles = StyleSheet.create({
   logoImg: {
     height: 30,
     width: 30,
+
     justifyContent: "center",
     alignItems: "center",
     padding: 10,
-  },
-  thumbnail: {
-    flex: 1,
-    flexDirection: "row",
-    height: 100,
-    backgroundColor: "#003850",
-    borderRadius: 5,
-  },
-  thumbnailImg: {
-    height: 100,
-    flex: 0.3,
-    borderRadius: 5,
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 10,
-  },
-  thumbnailText: {
-    flex: 0.7,
-    borderRadius: 5,
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 10,
-    color: "white",
   },
   bottomPost: {
     backgroundColor: "white",
@@ -215,5 +195,4 @@ const styles = StyleSheet.create({
     color: "white",
   },
 });
-
-export default VideoSocialPost;
+export default AccountComponent;

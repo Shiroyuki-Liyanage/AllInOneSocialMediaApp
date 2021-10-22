@@ -6,7 +6,7 @@ import React from "react";
 
 export const CreateRedditSocialPosts = (account, accountData, content) => {
   for (var postIndex in accountData.data.children) {
-    console.log(accountData.data.children[postIndex].data);
+    //console.log(accountData.data.children[postIndex].data);
     if (accountData.data.children[postIndex].data["thumbnail"] == "self") {
       //Reddit post with only text
       CreateRedditSocialPost(
@@ -118,7 +118,11 @@ const PostCharacterLimit = (text) => {
 };
 
 const CheckValidImageURL = (url) => {
-  return url.match(/\.(jpeg|jpg|gif|png)$/) != null;
+  if (typeof url == "undefined") {
+    return false;
+  } else {
+    return url.match(/\.(jpeg|jpg|gif|png)$/) != null;
+  }
 };
 
 //Check if post links to an article!!!

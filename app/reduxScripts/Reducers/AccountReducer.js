@@ -4,6 +4,7 @@ import {
   ADD_FRIEND,
   ADD_REDDIT_ACCOUNT,
   ADD_TWITTER_ACCOUNT,
+  UPDATE_ACCOUNTS,
 } from "../Types/types";
 
 const INITIAL_STATE = {
@@ -22,6 +23,11 @@ const accountsReducer = (state = INITIAL_STATE, action) => {
     case ADD_REDDIT_ACCOUNT:
       updatedRedditAccounts = AddRedditAccount(redditAccounts, action);
       break;
+    case UPDATE_ACCOUNTS:
+      let accounts = UpdateAccounts(twitterAccounts, redditAccounts, action);
+      updatedTwitterAccounts = accounts.twitterAccounts;
+      updatedRedditAccounts = accounts.redditAccounts;
+      break;
     default:
       return state;
   }
@@ -29,6 +35,26 @@ const accountsReducer = (state = INITIAL_STATE, action) => {
   return {
     twitterAccounts: updatedTwitterAccounts,
     redditAccounts: updatedRedditAccounts,
+  };
+};
+
+const UpdateAccounts = (twitterAccounts, redditAccounts, action) => {
+  var accounts = action.payload;
+  for (var accountID in accounts) {
+    if (accounts[accountID].accountType == "Reddit") {
+      if (!redditAccounts.includes(accountID)) {
+        redditAccounts.push(accountID);
+      }
+    } else if (accounts[accountID].accountType == "Twitter") {
+      if (!twitterAccounts.includes(accountID)) {
+        twitterAccounts.push(accountID);
+      }
+    }
+  }
+
+  return {
+    redditAccounts: redditAccounts,
+    twitterAccounts: twitterAccounts,
   };
 };
 

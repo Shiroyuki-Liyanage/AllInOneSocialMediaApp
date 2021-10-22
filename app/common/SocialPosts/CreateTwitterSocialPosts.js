@@ -48,7 +48,7 @@ const CreateTwitterSocialPost = (twitterAccount, twitterPost, content) => {
     post_type: "twitter",
     key: twitterPost.id,
     name: twitterAccount.name,
-    username: twitterAccount.screen_name,
+    username: "@" + twitterAccount.screen_name,
     body: twitterPost.text,
     imageURL: twitterAccount.profile_image_url,
     created_at: ConvertUTCToDate(twitterPost.created_at),

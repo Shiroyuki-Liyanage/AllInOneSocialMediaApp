@@ -20,9 +20,10 @@ class SocialPost extends React.Component {
   }
 
   GetLogo(logoName) {
-    if (logoName == "Twitter") {
+    //console.log(logoName);
+    if (logoName == "twitter") {
       return twitter;
-    } else if (logoName == "Reddit") {
+    } else if (logoName == "reddit") {
       return reddit;
     }
   }
@@ -42,7 +43,7 @@ class SocialPost extends React.Component {
             {this.props.created_at}
           </Text>
           <Image
-            style={styles.profileImg}
+            style={styles.logoImg}
             source={this.GetLogo(this.props.post_type)}
           />
         </View>
@@ -64,11 +65,12 @@ class SocialPost extends React.Component {
               style={{
                 flexDirection: "row",
                 width: "100%",
+                backgroundColor: "transparent",
               }}
             >
               <Text style={styles.displayName}>{this.props.name}</Text>
-              <Text style={styles.username}> @{this.props.username}</Text>
             </View>
+            <Text style={styles.username}> {this.props.username}</Text>
             <Text style={styles.body}>{this.props.body}</Text>
           </View>
         </View>
@@ -132,7 +134,7 @@ const styles = StyleSheet.create({
   username: {
     color: "#696969",
     flexWrap: "wrap",
-    height: "100%",
+    width: "100%",
   },
   date: {
     color: "#696969",
@@ -153,6 +155,14 @@ const styles = StyleSheet.create({
     height: 45,
     width: 45,
     borderRadius: 40,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 10,
+  },
+  logoImg: {
+    height: 30,
+    width: 30,
+
     justifyContent: "center",
     alignItems: "center",
     padding: 10,

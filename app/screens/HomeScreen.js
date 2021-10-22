@@ -12,6 +12,8 @@ import {
 import Presenter from "./Presenter";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { UpdateAccounts } from "../reduxScripts/Actions/AccountActions";
 
 const Tab = createBottomTabNavigator();
 
@@ -27,6 +29,11 @@ class HomeScreen extends React.Component {
   }
 
   componentDidMount() {}
+
+  Refresh() {
+    this.props.updateAccounts(this.Presenter.GetAccounts());
+    this.GetSocialPosts();
+  }
 
   /**
    * Get recent social media posts from all linked accounts
@@ -107,4 +114,12 @@ const mapStateToProps = (state) => {
   return { accounts };
 };
 
-export default connect(mapStateToProps)(HomeScreen);
+const mapDispatchToProps = (dispatch) =>
+  bindActionCreators(
+    {
+      updateAccounts: UpdateAccounts,
+    },
+    dispatch
+  );
+
+export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);
