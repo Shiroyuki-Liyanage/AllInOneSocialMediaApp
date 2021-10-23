@@ -11,7 +11,7 @@ class TwitterAccount extends Account {
   constructor(accountID, accountType) {
     super(accountID, accountType);
     this.FollowedAccounts = {};
-    this.MaxFollowAccounts = 1;
+    this.MaxFollowAccounts = 5;
     this.UserData = {};
   }
 
