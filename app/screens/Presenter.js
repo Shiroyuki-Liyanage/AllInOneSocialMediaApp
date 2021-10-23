@@ -72,6 +72,10 @@ class Presenter {
     return isNewAccount;
   }
 
+  async UpdateAccount(accountID, action, muted) {
+    await this.ContentModel.UpdateAccount(accountID, action, muted);
+  }
+
   /**
    * Refresh social media posts
    */

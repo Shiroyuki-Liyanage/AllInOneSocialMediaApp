@@ -56,6 +56,7 @@ class HomeScreen extends React.Component {
   }
 
   async UpdateTwitterAccounts(accounts) {
+    await this.UpdateAccounts();
     if (
       accounts.length > 0 ||
       this.Presenter.GetAmountOfTwitterAcconunts() > accounts.length
@@ -71,7 +72,7 @@ class HomeScreen extends React.Component {
   }
 
   async UpdateRedditAccounts(accounts) {
-    //console.log(accounts);
+    await this.UpdateAccounts();
     if (
       accounts.length > 0 ||
       this.Presenter.GetAmountOfRedditAcconunts() > accounts.length
@@ -84,6 +85,14 @@ class HomeScreen extends React.Component {
         console.log("Reddit");
       }
     }
+  }
+
+  async UpdateAccounts() {
+    await this.Presenter.UpdateAccount(
+      this.props.accounts.accountUpdate,
+      this.props.accounts.accountAction,
+      this.props.accounts.accountValue
+    );
   }
 
   render() {
