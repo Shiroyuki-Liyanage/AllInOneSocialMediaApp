@@ -14,9 +14,14 @@ import { Icon } from "react-native-elements";
 const reddit = require("../../assets/Reddit.png");
 const twitter = require("../../assets/Twitter.png");
 
-class SocialPost extends React.Component {
-  GoToPostLink(url) {
-    Linking.openURL(url);
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { RemoveAccount } from "../../reduxScripts/Actions/AccountActions";
+
+class AccountComponent extends React.Component {
+  async RemoveAccount(accountID, presenter) {
+    this.props.removeAccount(accountID);
+    await presenter.RemoveAccount(accountID);
   }
 
   GetLogo(logoName) {
@@ -27,7 +32,6 @@ class SocialPost extends React.Component {
       return reddit;
     }
   }
-
   render() {
     return (
       <View style={styles.FullPost}>
@@ -39,9 +43,6 @@ class SocialPost extends React.Component {
             justifyContent: "flex-end",
           }}
         >
-          <Text style={{ textAlign: "right", padding: 5, color: "grey" }}>
-            {this.props.created_at}
-          </Text>
           <Image
             style={styles.logoImg}
             source={this.GetLogo(this.props.post_type)}
@@ -57,10 +58,17 @@ class SocialPost extends React.Component {
           >
             <Image
               style={styles.profileImg}
-              source={{ uri: this.props.imageURL }}
+              source={{ uri: this.props.profile_image_url }}
             />
           </View>
-          <View style={{ backgroundColor: "transparent", flex: 0.8 }}>
+          <View
+            style={{
+              backgroundColor: "transparent",
+              flex: 0.8,
+              justifyContent: "center",
+              paddingleft: 30,
+            }}
+          >
             <View
               style={{
                 flexDirection: "row",
@@ -71,7 +79,6 @@ class SocialPost extends React.Component {
               <Text style={styles.displayName}>{this.props.name}</Text>
             </View>
             <Text style={styles.username}> {this.props.username}</Text>
-            <Text style={styles.body}>{this.props.body}</Text>
           </View>
         </View>
         <View
@@ -81,23 +88,23 @@ class SocialPost extends React.Component {
           }}
         >
           <View style={{ backgroundColor: "transparent", flex: 0.5 }}>
-            <TouchableWithoutFeedback
-              id="Link"
-              style={styles.postButton}
-              onPress={() => {
-                this.GoToPostLink(this.props.post_url);
-              }}
-            >
-              <Icon
-                name="link-variant"
-                type="material-community"
-                color="white"
-              />
+            <TouchableWithoutFeedback id="Settings" style={styles.postButton}>
+              <Icon name="tune" type="material-community" color="white" />
             </TouchableWithoutFeedback>
           </View>
           <View style={{ backgroundColor: "transparent", flex: 0.5 }}>
-            <TouchableWithoutFeedback id="Comment" style={styles.postButton}>
-              <Icon name="comment" type="material-community" color="white" />
+            <TouchableWithoutFeedback
+              id="RemoveAccount"
+              style={styles.postButton}
+              onPress={() => {
+                this.RemoveAccount(this.props.accountID, this.props.presenter);
+              }}
+            >
+              <Icon
+                name="delete-forever"
+                type="material-community"
+                color="white"
+              />
             </TouchableWithoutFeedback>
           </View>
         </View>
@@ -126,15 +133,17 @@ const styles = StyleSheet.create({
   displayName: {
     color: "white",
     fontWeight: "bold",
-    paddingLeft: 10,
-    paddingRight: 10,
+    paddingLeft: 20,
     flexWrap: "wrap",
     height: "100%",
+    fontSize: 25,
   },
   username: {
     color: "#696969",
     flexWrap: "wrap",
     width: "100%",
+    paddingLeft: 20,
+    fontSize: 15,
   },
   date: {
     color: "#696969",
@@ -152,8 +161,8 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
   },
   profileImg: {
-    height: 45,
-    width: 45,
+    height: 80,
+    width: 80,
     borderRadius: 40,
     justifyContent: "center",
     alignItems: "center",
@@ -192,4 +201,17 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SocialPost;
+const mapStateToProps = (state) => {
+  const { accounts } = state;
+  return { accounts };
+};
+
+const mapDispatchToProps = (dispatch) =>
+  bindActionCreators(
+    {
+      removeAccount: RemoveAccount,
+    },
+    dispatch
+  );
+
+export default connect(mapStateToProps, mapDispatchToProps)(AccountComponent);

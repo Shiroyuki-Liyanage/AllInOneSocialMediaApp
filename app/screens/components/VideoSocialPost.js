@@ -10,24 +10,12 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 import { Icon } from "react-native-elements";
+import SocialPost from "./SocialPost";
 
 const reddit = require("../../assets/Reddit.png");
 const twitter = require("../../assets/Twitter.png");
 
-class SocialPost extends React.Component {
-  GoToPostLink(url) {
-    Linking.openURL(url);
-  }
-
-  GetLogo(logoName) {
-    //console.log(logoName);
-    if (logoName == "twitter") {
-      return twitter;
-    } else if (logoName == "reddit") {
-      return reddit;
-    }
-  }
-
+class VideoSocialPost extends SocialPost {
   render() {
     return (
       <View style={styles.FullPost}>
@@ -65,13 +53,27 @@ class SocialPost extends React.Component {
               style={{
                 flexDirection: "row",
                 width: "100%",
-                backgroundColor: "transparent",
               }}
             >
               <Text style={styles.displayName}>{this.props.name}</Text>
             </View>
             <Text style={styles.username}> {this.props.username}</Text>
             <Text style={styles.body}>{this.props.body}</Text>
+            <TouchableWithoutFeedback
+              onPress={() => {
+                this.GoToPostLink(this.props.video_link);
+              }}
+            >
+              <View style={styles.thumbnail}>
+                <Image
+                  style={styles.thumbnailImg}
+                  source={{ uri: this.props.thumbnail }}
+                />
+                <Text style={styles.thumbnailText}>
+                  {"Video Link: " + this.props.video_link}
+                </Text>
+              </View>
+            </TouchableWithoutFeedback>
           </View>
         </View>
         <View
@@ -162,10 +164,32 @@ const styles = StyleSheet.create({
   logoImg: {
     height: 30,
     width: 30,
-
     justifyContent: "center",
     alignItems: "center",
     padding: 10,
+  },
+  thumbnail: {
+    flex: 1,
+    flexDirection: "row",
+    height: 100,
+    backgroundColor: "#003850",
+    borderRadius: 5,
+  },
+  thumbnailImg: {
+    height: 100,
+    flex: 0.3,
+    borderRadius: 5,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 10,
+  },
+  thumbnailText: {
+    flex: 0.7,
+    borderRadius: 5,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 10,
+    color: "white",
   },
   bottomPost: {
     backgroundColor: "white",
@@ -192,4 +216,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SocialPost;
+export default VideoSocialPost;
