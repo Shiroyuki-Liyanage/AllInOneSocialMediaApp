@@ -11,12 +11,9 @@ class AccountManager {
   }
 
   GetAccount(accountID) {
-    // console.log(accountID);
     if (!(accountID in this.Accounts)) {
       return null;
     }
-    //console.log(this.Accounts[accountID]);
-
     return this.Accounts[accountID];
   }
 
@@ -28,12 +25,43 @@ class AccountManager {
     return this.Accounts;
   }
 
+  GetTwitterAccounts() {
+    var twitterAccounts = {};
+
+    for (var accountID in this.Accounts) {
+      if (this.Accounts[accountID].getAccountType() == "Twitter") {
+        twitterAccounts[accountID] = this.Accounts[accountID];
+      }
+    }
+
+    return twitterAccounts;
+  }
+
+  GetAmountOfTwitterAcconunts() {
+    return Object.keys(this.GetTwitterAccounts()).length;
+  }
+
+  GetRedditAccounts() {
+    var twitterAccounts = {};
+
+    for (var accountID in this.Accounts) {
+      if (this.Accounts[accountID].getAccountType() == "Reddit") {
+        twitterAccounts[accountID] = this.Accounts[accountID];
+      }
+    }
+
+    return twitterAccounts;
+  }
+
+  GetAmountOfRedditAcconunts() {
+    return Object.keys(this.GetRedditAccounts()).length;
+  }
+
   async AddAccount(account) {
     this.Accounts[account.accountID] = await account;
   }
 
   RemoveAccountByID(accountID) {
-    console.log("*******************Removing: " + accountID);
     delete this.Accounts[accountID];
   }
 

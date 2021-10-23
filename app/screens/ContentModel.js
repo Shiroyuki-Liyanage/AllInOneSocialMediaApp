@@ -36,7 +36,7 @@ class ContentModel {
         updated = true;
       }
     }
-    console.log("I'm Going to murder you");
+
     /**
      * Delete account in post manager if redux store does not have it.
      */
@@ -47,11 +47,8 @@ class ContentModel {
       ) {
         continue;
       }
-      console.log("LOOOOOOOOOOOOOOOOOOOOOOK");
       console.log(reduxTwitterAccount);
-      console.log(accountID);
       if (!(accountID in reduxTwitterAccount)) {
-        console.log("AHHHHHHHHHHHHHHHHHHH");
         this.PostManager.GetAccountManager().RemoveAccountByID(accountID);
         updated = true;
       }
@@ -236,6 +233,14 @@ class ContentModel {
     } catch (exception) {
       return false;
     }
+  }
+
+  GetAmountOfTwitterAcconunts() {
+    return this.PostManager.GetAccountManager().GetAmountOfTwitterAcconunts();
+  }
+
+  GetAmountOfRedditAcconunts() {
+    return this.PostManager.GetAccountManager().GetAmountOfRedditAcconunts();
   }
 }
 

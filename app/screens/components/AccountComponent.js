@@ -21,7 +21,14 @@ import { RemoveAccount } from "../../reduxScripts/Actions/AccountActions";
 class AccountComponent extends React.Component {
   async RemoveAccount(accountID, presenter) {
     this.props.removeAccount(accountID);
-    await presenter.RemoveAccount(accountID);
+    if (
+      this.props.accounts.twitterAccounts.length <= 0 &&
+      this.props.accounts.redditAccounts <= 0
+    ) {
+      await presenter.ClearAccounts();
+    } else {
+      await presenter.RemoveAccount(accountID);
+    }
   }
 
   GetLogo(logoName) {

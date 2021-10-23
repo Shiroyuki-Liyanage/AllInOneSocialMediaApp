@@ -218,6 +218,13 @@ class Presenter {
     );
   }
 
+  GetAmountOfRedditAcconunts() {
+    return this.ContentModel.GetAmountOfRedditAcconunts();
+  }
+  GetAmountOfTwitterAcconunts() {
+    return this.ContentModel.GetAmountOfTwitterAcconunts();
+  }
+
   async ClearAccounts() {
     console.log(this.ContentModel);
 
