@@ -14,7 +14,10 @@ import Presenter from "./Presenter";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { UpdateAccounts } from "../reduxScripts/Actions/AccountActions";
+import {
+  UpdateAccounts,
+  ClearAccount,
+} from "../reduxScripts/Actions/AccountActions";
 import AccountComponent from "./components/AccountComponent";
 
 class AccountsPage extends React.Component {
@@ -127,6 +130,7 @@ class AccountsPage extends React.Component {
           title={"Clear Accounts"}
           onPress={() => {
             this.Presenter.ClearAccounts();
+            this.props.clearAccount();
           }}
         />
         <ScrollView
@@ -164,6 +168,7 @@ const mapDispatchToProps = (dispatch) =>
   bindActionCreators(
     {
       updateAccounts: UpdateAccounts,
+      clearAccount: ClearAccount,
     },
     dispatch
   );

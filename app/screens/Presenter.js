@@ -129,26 +129,27 @@ class Presenter {
       (a, b) => Date.parse(b.created_at) - Date.parse(a.created_at)
     );
 
+    return this.CreateSocialPostComponents(sortedContent);
+  }
+
+  CreateSocialPostComponents(ListofData) {
     var ComponentContent = [];
-    for (var contentIndex in sortedContent) {
-      if (sortedContent[contentIndex].type == "SocialPost") {
-        this.CreateComponentSocialPost(
-          sortedContent[contentIndex],
-          ComponentContent
-        );
-      } else if (sortedContent[contentIndex].type == "ArticleSocialPost") {
+    for (var dataIndex in ListofData) {
+      if (ListofData[dataIndex].type == "SocialPost") {
+        this.CreateComponentSocialPost(ListofData[dataIndex], ComponentContent);
+      } else if (ListofData[dataIndex].type == "ArticleSocialPost") {
         this.CreateComponentArticleSocialPost(
-          sortedContent[contentIndex],
+          ListofData[dataIndex],
           ComponentContent
         );
-      } else if (sortedContent[contentIndex].type == "VideoSocialPost") {
+      } else if (ListofData[dataIndex].type == "VideoSocialPost") {
         this.CreateComponentVideoSocialPost(
-          sortedContent[contentIndex],
+          ListofData[dataIndex],
           ComponentContent
         );
-      } else if (sortedContent[contentIndex].type == "ImageSocialPost") {
+      } else if (ListofData[dataIndex].type == "ImageSocialPost") {
         this.CreateComponentImageSocialPost(
-          sortedContent[contentIndex],
+          ListofData[dataIndex],
           ComponentContent
         );
       }

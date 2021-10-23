@@ -14,7 +14,6 @@ export const CreateTwitterSocialPosts = (account, accountData, content) => {
         twiiterFollowID;
       unsortedContent.push(accountData[twiiterFollowID].data[postIndex]);
     }
-    //unsortedContent = unsortedContent.concat(accountData[twiiterFollowID].data);
   }
 
   //Sort content
@@ -31,18 +30,14 @@ export const CreateTwitterSocialPosts = (account, accountData, content) => {
     );
   }
 
-  // CreateTwitterSocialPost(
-  //   account.FollowedAccounts[twiiterFollowID],
-  //   accountData[twiiterFollowID].data,
-  //   content
-  // );
-
   return content;
 };
 
-const CreateTwitterSocialPost = (twitterAccount, twitterPost, content) => {
-  // console.log(twitterAccount);
-  // console.log(twitterPost);
+export const CreateTwitterSocialPost = (
+  twitterAccount,
+  twitterPost,
+  content
+) => {
   content.push({
     type: "SocialPost",
     post_type: "twitter",

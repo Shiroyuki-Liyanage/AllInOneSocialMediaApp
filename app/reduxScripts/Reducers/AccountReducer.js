@@ -7,6 +7,7 @@ import {
   UPDATE_ACCOUNTS,
   REMOVE_ACCOUNTS,
   UPDATE_ACCOUNT,
+  CLEAR_ACCOUNT,
 } from "../Types/types";
 
 const INITIAL_STATE = {
@@ -61,11 +62,16 @@ const accountsReducer = (state = INITIAL_STATE, action) => {
       updatedAccountAction = account.accountAction;
       updatedAccountValue = account.accountValue;
       break;
+    case CLEAR_ACCOUNT:
+      updatedTwitterAccounts = [];
+      updatedRedditAccounts = [];
+      updatedAccountUpdate = "";
+      updatedAccountAction = "";
+      updatedAccountValue = "";
+      break;
     default:
       return state;
   }
-
-  console.log(updatedTwitterAccounts);
 
   return {
     twitterAccounts: updatedTwitterAccounts,
