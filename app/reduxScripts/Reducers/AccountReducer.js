@@ -6,17 +6,30 @@ import {
   ADD_TWITTER_ACCOUNT,
   UPDATE_ACCOUNTS,
   REMOVE_ACCOUNTS,
+  UPDATE_ACCOUNT,
 } from "../Types/types";
 
 const INITIAL_STATE = {
   twitterAccounts: [],
   redditAccounts: [],
+  accountUpdate: "",
+  accountAction: "",
+  accountValue: "",
 };
 
 const accountsReducer = (state = INITIAL_STATE, action) => {
-  const { twitterAccounts, redditAccounts } = state;
+  const {
+    twitterAccounts,
+    redditAccounts,
+    accountUpdate,
+    accountAction,
+    accountValue,
+  } = state;
   let updatedTwitterAccounts = twitterAccounts;
   let updatedRedditAccounts = redditAccounts;
+  let updatedAccountUpdate = accountUpdate;
+  let updatedAccountAction = accountAction;
+  let updatedAccountValue = accountValue;
 
   let accounts = {};
 
@@ -37,6 +50,17 @@ const accountsReducer = (state = INITIAL_STATE, action) => {
       updatedTwitterAccounts = accounts.twitterAccounts;
       updatedRedditAccounts = accounts.redditAccounts;
       break;
+    case UPDATE_ACCOUNT:
+      account = UpdateAccount(
+        accountUpdate,
+        accountAction,
+        accountValue,
+        action
+      );
+      updatedAccountUpdate = account.accountUpdate;
+      updatedAccountAction = account.accountAction;
+      updatedAccountValue = account.accountValue;
+      break;
     default:
       return state;
   }
@@ -46,6 +70,21 @@ const accountsReducer = (state = INITIAL_STATE, action) => {
   return {
     twitterAccounts: updatedTwitterAccounts,
     redditAccounts: updatedRedditAccounts,
+    accountUpdate: updatedAccountUpdate,
+    accountAction: updatedAccountAction,
+    accountValue: updatedAccountValue,
+  };
+};
+
+const UpdateAccount = (accountUpdate, accountAction, accountValue, action) => {
+  accountUpdate = action.payload.accountID;
+  accountAction = action.payload.action;
+  accountValue = action.payload.value;
+
+  return {
+    accountUpdate: accountUpdate,
+    accountAction: accountAction,
+    accountValue: accountValue,
   };
 };
 

@@ -3,8 +3,8 @@ import Account from "./Account";
 import { AccountType } from "./AccountType";
 
 class RedditAccount extends Account {
-  constructor(accountID, accountType) {
-    super(accountID, accountType);
+  constructor(accountID, accountType, accountMuted) {
+    super(accountID, accountType, accountMuted);
     this.RedditCommunityData = {};
   }
 

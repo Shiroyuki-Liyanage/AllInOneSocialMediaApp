@@ -5,6 +5,9 @@ import ArticleSocialPost from "../../screens/components/ArticleSocialPost";
 import React from "react";
 
 export const CreateRedditSocialPosts = (account, accountData, content) => {
+  if (accountData.data == null) {
+    return;
+  }
   for (var postIndex in accountData.data.children) {
     //console.log(accountData.data.children[postIndex].data);
     if (accountData.data.children[postIndex].data["thumbnail"] == "self") {

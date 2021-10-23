@@ -77,6 +77,14 @@ class AccountManager {
     }
     return true;
   }
+
+  SetMuteAccount(accountID, isMuted) {
+    if (this.CheckAccountExist(accountID)) {
+      this.Accounts[accountID].setMuteAccount(isMuted);
+      return true;
+    }
+    return false;
+  }
 }
 
 export default AccountManager;
