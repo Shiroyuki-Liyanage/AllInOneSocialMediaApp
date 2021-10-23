@@ -8,6 +8,7 @@ import {
   Pressable,
   Linking,
   TouchableWithoutFeedback,
+  Alert,
 } from "react-native";
 import { Icon } from "react-native-elements";
 
@@ -16,7 +17,11 @@ const twitter = require("../../assets/Twitter.png");
 
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { RemoveAccount } from "../../reduxScripts/Actions/AccountActions";
+import {
+  RemoveAccount,
+  UpdateAccount,
+} from "../../reduxScripts/Actions/AccountActions";
+import { SET_MUTE } from "../../reduxScripts/Actions/PresenterActions";
 
 class AccountComponent extends React.Component {
   async RemoveAccount(accountID, presenter) {
@@ -31,8 +36,21 @@ class AccountComponent extends React.Component {
     }
   }
 
+  async MuteAccount(accountID, presenter, isMuted) {
+    var NewMuted = !isMuted;
+    let Message = "";
+    if (NewMuted) {
+      Message = "Account has been muted";
+    } else {
+      Message = "Account has been unmuted";
+    }
+
+    Alert.alert("Account Info", Message);
+    await presenter.UpdateAccount(accountID, SET_MUTE, NewMuted);
+    this.props.updateAccount(accountID, SET_MUTE, NewMuted);
+  }
+
   GetLogo(logoName) {
-    //console.log(logoName);
     if (logoName == "twitter") {
       return twitter;
     } else if (logoName == "reddit") {
@@ -94,12 +112,28 @@ class AccountComponent extends React.Component {
             width: "100%",
           }}
         >
-          <View style={{ backgroundColor: "transparent", flex: 0.5 }}>
+          <View style={{ backgroundColor: "transparent", flex: 1 }}>
             <TouchableWithoutFeedback id="Settings" style={styles.postButton}>
               <Icon name="tune" type="material-community" color="white" />
             </TouchableWithoutFeedback>
           </View>
-          <View style={{ backgroundColor: "transparent", flex: 0.5 }}>
+          <View style={{ backgroundColor: "transparent", flex: 1 }}>
+            <TouchableWithoutFeedback
+              id="MuteAccount"
+              style={styles.postButton}
+              onPress={() => {
+                console.log("Mute");
+                this.MuteAccount(
+                  this.props.accountID,
+                  this.props.presenter,
+                  this.props.isMuted
+                );
+              }}
+            >
+              <Icon name="bell" type="material-community" color="white" />
+            </TouchableWithoutFeedback>
+          </View>
+          <View style={{ backgroundColor: "transparent", flex: 1 }}>
             <TouchableWithoutFeedback
               id="RemoveAccount"
               style={styles.postButton}
@@ -217,6 +251,7 @@ const mapDispatchToProps = (dispatch) =>
   bindActionCreators(
     {
       removeAccount: RemoveAccount,
+      updateAccount: UpdateAccount,
     },
     dispatch
   );

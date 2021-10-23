@@ -4,6 +4,7 @@ import {
   ADD_REDDIT_ACCOUNT,
   UPDATE_ACCOUNTS,
   REMOVE_ACCOUNTS,
+  UPDATE_ACCOUNT,
 } from "../Types/types";
 
 export const addFriend = (friendsIndex) => ({
@@ -29,4 +30,9 @@ export const UpdateAccounts = (accounts) => ({
 export const RemoveAccount = (accountID) => ({
   type: REMOVE_ACCOUNTS,
   payload: accountID,
+});
+
+export const UpdateAccount = (accountID, action, value) => ({
+  type: UPDATE_ACCOUNT,
+  payload: { accountID: accountID, action: action, value: value },
 });
