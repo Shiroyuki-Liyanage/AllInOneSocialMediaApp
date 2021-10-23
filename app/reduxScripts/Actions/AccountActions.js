@@ -1,5 +1,10 @@
-import { ADD_FRIEND } from "../Types/types";
-import { ADD_TWITTER_ACCOUNT } from "../Types/types";
+import {
+  ADD_FRIEND,
+  ADD_TWITTER_ACCOUNT,
+  ADD_REDDIT_ACCOUNT,
+  UPDATE_ACCOUNTS,
+  REMOVE_ACCOUNTS,
+} from "../Types/types";
 
 export const addFriend = (friendsIndex) => ({
   type: ADD_FRIEND,
@@ -8,5 +13,20 @@ export const addFriend = (friendsIndex) => ({
 
 export const AddTwitterAccount = (accountID) => ({
   type: ADD_TWITTER_ACCOUNT,
+  payload: accountID,
+});
+
+export const AddRedditAccount = (accountID) => ({
+  type: ADD_REDDIT_ACCOUNT,
+  payload: accountID,
+});
+
+export const UpdateAccounts = (accounts) => ({
+  type: UPDATE_ACCOUNTS,
+  payload: accounts,
+});
+
+export const RemoveAccount = (accountID) => ({
+  type: REMOVE_ACCOUNTS,
   payload: accountID,
 });

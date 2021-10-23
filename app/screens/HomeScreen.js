@@ -12,6 +12,8 @@ import {
 import Presenter from "./Presenter";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { UpdateAccounts } from "../reduxScripts/Actions/AccountActions";
 
 const Tab = createBottomTabNavigator();
 
@@ -27,6 +29,13 @@ class HomeScreen extends React.Component {
   }
 
   componentDidMount() {}
+
+  Refresh(update) {
+    if (typeof update != "undefined") {
+      this.props.updateAccounts(this.Presenter.GetAccounts());
+    }
+    this.GetSocialPosts();
+  }
 
   /**
    * Get recent social media posts from all linked accounts
@@ -46,12 +55,26 @@ class HomeScreen extends React.Component {
       : [<Text key={"NoPosts"}>No posts... :(</Text>];
   }
 
-  async UpdateAccounts(accounts) {
+  async UpdateTwitterAccounts(accounts) {
+    //console.log(accounts);
     if (accounts.length > 0) {
-      let isNewAccount = await this.Presenter.AddAccount(accounts);
+      let isNewAccount = await this.Presenter.AddTwitterAccount(accounts);
+      //console.log(isNewAccount);
       if (isNewAccount) {
-        console.log(isNewAccount);
-        this.GetSocialPosts();
+        //this.GetSocialPosts();
+        console.log("Twiitter");
+      }
+    }
+  }
+
+  async UpdateRedditAccounts(accounts) {
+    //console.log(accounts);
+    if (accounts.length > 0) {
+      let isNewAccount = await this.Presenter.AddRedditAccount(accounts);
+      //console.log(isNewAccount);
+      if (isNewAccount) {
+        //this.GetSocialPosts();
+        console.log("Reddit");
       }
     }
   }
@@ -59,8 +82,12 @@ class HomeScreen extends React.Component {
   render() {
     let { socialPost, refreshing } = this.state;
     // if (isUpdate) {
-    this.UpdateAccounts(this.props.accounts.twitterAccounts);
+
     // }
+    console.log(this.props.accounts);
+
+    this.UpdateRedditAccounts(this.props.accounts.redditAccounts);
+    this.UpdateTwitterAccounts(this.props.accounts.twitterAccounts);
 
     return (
       <View style={styles.container}>
@@ -96,4 +123,12 @@ const mapStateToProps = (state) => {
   return { accounts };
 };
 
-export default connect(mapStateToProps)(HomeScreen);
+const mapDispatchToProps = (dispatch) =>
+  bindActionCreators(
+    {
+      updateAccounts: UpdateAccounts,
+    },
+    dispatch
+  );
+
+export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);

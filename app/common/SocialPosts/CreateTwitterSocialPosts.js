@@ -16,15 +16,11 @@ export const CreateTwitterSocialPosts = (account, accountData, content) => {
     }
     //unsortedContent = unsortedContent.concat(accountData[twiiterFollowID].data);
   }
-  console.log("unsorted");
-  console.log(unsortedContent);
 
   //Sort content
   var sortedContent = unsortedContent.sort(
     (a, b) => Date.parse(b.created_at) - Date.parse(a.created_at)
   );
-  console.log("sorted");
-  console.log(sortedContent);
 
   for (var twitterPostIndex in sortedContent) {
     //console.log(account.FollowedAccounts);
@@ -47,14 +43,24 @@ export const CreateTwitterSocialPosts = (account, accountData, content) => {
 const CreateTwitterSocialPost = (twitterAccount, twitterPost, content) => {
   // console.log(twitterAccount);
   // console.log(twitterPost);
-  content.push(
-    <SocialPost
-      key={twitterPost.id}
-      name={twitterAccount.name}
-      username={twitterAccount.screen_name}
-      body={twitterPost.text}
-      imageURL={twitterAccount.profile_image_url}
-      created_at={twitterPost.created_at}
-    />
-  );
+  content.push({
+    type: "SocialPost",
+    post_type: "twitter",
+    key: twitterPost.id,
+    name: twitterAccount.name,
+    username: "@" + twitterAccount.screen_name,
+    body: twitterPost.text,
+    imageURL: twitterAccount.profile_image_url,
+    created_at: ConvertUTCToDate(twitterPost.created_at),
+    post_url: GetTwitterURL(twitterAccount.screen_name, twitterPost.id),
+  });
+};
+
+const GetTwitterURL = (accountName, tweetID) => {
+  return "https://twitter.com/" + accountName + "/status/" + tweetID;
+};
+
+const ConvertUTCToDate = (date) => {
+  var myDate = new Date(date);
+  return myDate.toLocaleString(); // 01/10/2020, 10:35:02
 };

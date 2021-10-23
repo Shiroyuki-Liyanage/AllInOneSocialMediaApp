@@ -1,4 +1,5 @@
 import Account from "./Account";
+import { AccountType } from "./AccountType";
 
 import TwitterAPIController from "../APIControllers/TwitterAPIController";
 import {
@@ -11,14 +12,20 @@ class TwitterAccount extends Account {
     super(accountID, accountType);
     this.FollowedAccounts = {};
     this.MaxFollowAccounts = 1;
+    this.UserData = {};
   }
 
   /**
    * Initializes Account with necessary info from API call
    * @returns TwitterAccount
    */
-  async InitializeAccount() {
-    await this.GetStoredAccountFollows();
+  async InitializeAccount(storedFollowedAccounts) {
+    if (typeof storedFollowedAccounts == "undefined") {
+      await this.GetStoredAccountFollows();
+    } else {
+      this.FollowedAccounts = storedFollowedAccounts;
+    }
+    this.UserData = await this.GetAccountData(this.accountID);
     return this;
   }
 
@@ -60,6 +67,19 @@ class TwitterAccount extends Account {
       let userFollows = await twitterAPI.GetAccountFollows(this.accountID);
       await StoreAccountTwitterFollows(this.accountID, userFollows);
       return userFollows;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async GetAccountData() {
+    let twitterAPI = new TwitterAPIController();
+    try {
+      let AccountData = await twitterAPI.GetAdvanceUserInfo(
+        null,
+        this.accountID
+      );
+      return AccountData;
     } catch (error) {
       console.log(error);
     }

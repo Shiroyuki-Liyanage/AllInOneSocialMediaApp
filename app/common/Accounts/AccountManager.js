@@ -11,9 +11,12 @@ class AccountManager {
   }
 
   GetAccount(accountID) {
+    // console.log(accountID);
     if (!(accountID in this.Accounts)) {
       return null;
     }
+    //console.log(this.Accounts[accountID]);
+
     return this.Accounts[accountID];
   }
 
@@ -27,6 +30,24 @@ class AccountManager {
 
   async AddAccount(account) {
     this.Accounts[account.accountID] = await account;
+  }
+
+  RemoveAccountByID(accountID) {
+    console.log("*******************Removing: " + accountID);
+    delete this.Accounts[accountID];
+  }
+
+  ClearAccounts() {
+    this.Accounts = {};
+  }
+
+  IsSame(newAccountManager) {
+    for (var accountID in newAccountManager.GetAccounts()) {
+      if (!(accountID in this.Accounts)) {
+        return false;
+      }
+    }
+    return true;
   }
 }
 

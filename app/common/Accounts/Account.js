@@ -1,3 +1,5 @@
+import { AccountType } from "./AccountType";
+
 class Account {
   constructor(accountID, accountType) {
     this.accountID = accountID;

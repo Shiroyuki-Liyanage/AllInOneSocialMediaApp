@@ -20,7 +20,6 @@ import { createStore } from "redux";
 import AccountReducer from "./app/reduxScripts/Reducers/AccountReducer";
 import AccountManager from "./app/common/Accounts/AccountManager";
 
-
 const Drawer = createDrawerNavigator();
 
 const store = createStore(AccountReducer);
@@ -43,7 +42,10 @@ class App extends React.Component {
             <Drawer.Screen
               name="Twitter Login Page"
               component={TwitterLoginPage}
-              options={{ test: "hello" }}
+            />
+            <Drawer.Screen
+              name="Reddit Login Page"
+              component={RedditLoginPage}
             />
           </Drawer.Navigator>
         </NavigationContainer>

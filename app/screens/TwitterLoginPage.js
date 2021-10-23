@@ -12,7 +12,7 @@ import {
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { AddTwitterAccount } from "../reduxScripts/Actions/AccountActions";
-import { twitter } from "../assets/icon.png";
+const twitter = require("../assets/Twitter.png");
 import TwitterAPIController from "../common/APIControllers/TwitterAPIController";
 
 class TwitterLoginPage extends React.Component {
@@ -26,8 +26,6 @@ class TwitterLoginPage extends React.Component {
   }
 
   async CheckValidTwitterAccount() {
-    console.log(this.state.username);
-
     var user = await this.TwitterAPI.GetUserByUsername(
       null,
       this.state.username
@@ -48,7 +46,16 @@ class TwitterLoginPage extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Image source={twitter} style={{ width: 50, height: 50 }} />
+        <View
+          style={{
+            width: "100%",
+            justifyContent: "flex-end",
+            flexDirection: "row",
+          }}
+        >
+          <Image source={twitter} style={styles.image} />
+        </View>
+
         <Text style={styles.Text}>Link Twitter Account</Text>
 
         <TextInput
@@ -75,6 +82,11 @@ const styles = StyleSheet.create({
     backgroundColor: "black",
     paddingLeft: 20,
     paddingRight: 20,
+  },
+  image: {
+    width: 90,
+    height: 90,
+    justifyContent: "flex-end",
   },
   input: {
     height: 40,
