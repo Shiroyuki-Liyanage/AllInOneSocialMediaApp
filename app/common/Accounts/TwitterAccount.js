@@ -8,10 +8,10 @@ import {
 } from "../StoreData/StoreTwitterData";
 
 class TwitterAccount extends Account {
-  constructor(accountID, accountType) {
-    super(accountID, accountType);
+  constructor(accountID, accountType, accountMuted) {
+    super(accountID, accountType, accountMuted);
     this.FollowedAccounts = {};
-    this.MaxFollowAccounts = 1;
+    this.MaxFollowAccounts = 5;
     this.UserData = {};
   }
 

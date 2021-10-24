@@ -4,8 +4,10 @@ import SocialPostManager from "../common/SocialPostManager";
 import TwitterAccount from "../common/Accounts/TwitterAccount";
 import RedditAccount from "../common/Accounts/RedditAccount";
 import { AccountType } from "../common/Accounts/AccountType";
+import { SET_MUTE } from "../reduxScripts/Actions/PresenterActions";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { UpdateAccounts } from "../reduxScripts/Actions/AccountActions";
 
 class ContentModel {
   constructor() {
@@ -25,7 +27,6 @@ class ContentModel {
       if (
         !this.PostManager.GetAccountManager().CheckAccountExist(accounts[index])
       ) {
-        //console.log(accounts[index]);
         var NewAccount = await new TwitterAccount(
           accounts[index],
           AccountType.TWITTER
@@ -36,7 +37,7 @@ class ContentModel {
         updated = true;
       }
     }
-    console.log("I'm Going to murder you");
+
     /**
      * Delete account in post manager if redux store does not have it.
      */
@@ -47,11 +48,8 @@ class ContentModel {
       ) {
         continue;
       }
-      console.log("LOOOOOOOOOOOOOOOOOOOOOOK");
       console.log(reduxTwitterAccount);
-      console.log(accountID);
       if (!(accountID in reduxTwitterAccount)) {
-        console.log("AHHHHHHHHHHHHHHHHHHH");
         this.PostManager.GetAccountManager().RemoveAccountByID(accountID);
         updated = true;
       }
@@ -132,6 +130,7 @@ class ContentModel {
     var Accounts = await this.GetStoredAccounts();
     for (var index in Accounts) {
       var storedAccount = await this.GetStoredAccount(Accounts[index]);
+      console.log(storedAccount);
       if (storedAccount["accountType"] == "Twitter") {
         await this.PostManager.GetAccountManager().AddAccount(
           await this.CreateTwitterAccount(storedAccount)
@@ -159,14 +158,16 @@ class ContentModel {
   async CreateTwitterAccount(jsonAccount) {
     return await new TwitterAccount(
       jsonAccount["accountID"],
-      AccountType.TWITTER
+      AccountType.TWITTER,
+      jsonAccount["muted"]
     ).InitializeAccount(jsonAccount["FollowedAccounts"]);
   }
 
   async CreateRedditAccount(jsonAccount) {
     return await new RedditAccount(
       jsonAccount["accountID"],
-      AccountType.REDDIT
+      AccountType.REDDIT,
+      jsonAccount["muted"]
     ).InitializeAccount(jsonAccount["RedditCommunityData"]);
   }
 
@@ -182,6 +183,16 @@ class ContentModel {
       return res;
     } catch (error) {
       console.log(error);
+    }
+  }
+
+  async UpdateStoredAccount(account) {
+    try {
+      await AsyncStorage.setItem(account.accountID, JSON.stringify(account));
+      return true;
+    } catch (error) {
+      console.log(error);
+      return false;
     }
   }
 
@@ -236,6 +247,33 @@ class ContentModel {
     } catch (exception) {
       return false;
     }
+  }
+
+  GetAmountOfTwitterAcconunts() {
+    return this.PostManager.GetAccountManager().GetAmountOfTwitterAcconunts();
+  }
+
+  GetAmountOfRedditAcconunts() {
+    return this.PostManager.GetAccountManager().GetAmountOfRedditAcconunts();
+  }
+
+  async UpdateAccount(accountID, action, value) {
+    switch (action) {
+      case SET_MUTE:
+        await this.SetMuteAccount(accountID, value);
+        break;
+      default:
+        break;
+    }
+  }
+
+  async SetMuteAccount(accountID, isMuted) {
+    var Account = await this.GetStoredAccount(accountID);
+    if (Account.muted != isMuted) {
+      Account.muted = isMuted;
+      await this.UpdateStoredAccount(Account);
+    }
+    this.PostManager.GetAccountManager().SetMuteAccount(accountID, isMuted);
   }
 }
 

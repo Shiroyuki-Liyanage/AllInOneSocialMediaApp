@@ -56,8 +56,12 @@ class HomeScreen extends React.Component {
   }
 
   async UpdateTwitterAccounts(accounts) {
-    //console.log(accounts);
-    if (accounts.length > 0) {
+    await this.UpdateAccounts();
+    if (
+      accounts.length > 0 ||
+      this.Presenter.GetAmountOfTwitterAcconunts() > accounts.length
+    ) {
+      console.log("Update Twitter Account");
       let isNewAccount = await this.Presenter.AddTwitterAccount(accounts);
       //console.log(isNewAccount);
       if (isNewAccount) {
@@ -68,8 +72,12 @@ class HomeScreen extends React.Component {
   }
 
   async UpdateRedditAccounts(accounts) {
-    //console.log(accounts);
-    if (accounts.length > 0) {
+    await this.UpdateAccounts();
+    if (
+      accounts.length > 0 ||
+      this.Presenter.GetAmountOfRedditAcconunts() > accounts.length
+    ) {
+      console.log("Update Reddit Account");
       let isNewAccount = await this.Presenter.AddRedditAccount(accounts);
       //console.log(isNewAccount);
       if (isNewAccount) {
@@ -79,12 +87,20 @@ class HomeScreen extends React.Component {
     }
   }
 
+  async UpdateAccounts() {
+    await this.Presenter.UpdateAccount(
+      this.props.accounts.accountUpdate,
+      this.props.accounts.accountAction,
+      this.props.accounts.accountValue
+    );
+  }
+
   render() {
     let { socialPost, refreshing } = this.state;
     // if (isUpdate) {
 
     // }
-    console.log(this.props.accounts);
+    console.log("Update Screen");
 
     this.UpdateRedditAccounts(this.props.accounts.redditAccounts);
     this.UpdateTwitterAccounts(this.props.accounts.twitterAccounts);

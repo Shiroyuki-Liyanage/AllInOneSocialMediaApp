@@ -14,7 +14,10 @@ import Presenter from "./Presenter";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { UpdateAccounts } from "../reduxScripts/Actions/AccountActions";
+import {
+  UpdateAccounts,
+  ClearAccount,
+} from "../reduxScripts/Actions/AccountActions";
 import AccountComponent from "./components/AccountComponent";
 
 class AccountsPage extends React.Component {
@@ -107,6 +110,7 @@ class AccountsPage extends React.Component {
         profile_image_url={account.RedditCommunityData.imageURL}
         presenter={this.Presenter}
         accountID={account.accountID}
+        isMuted={account.muted}
       />
     );
   }
@@ -117,18 +121,32 @@ class AccountsPage extends React.Component {
     return (
       <View style={styles.container}>
         <Button
-          title={"Refresh"}
+          title={"Refresh Accounts"}
           onPress={() => {
             this.GetAccounts();
           }}
         />
         <Button
-          title={"Clear"}
+          title={"Clear Accounts"}
           onPress={() => {
             this.Presenter.ClearAccounts();
+            this.props.clearAccount();
           }}
         />
-        <ScrollView>{this.CreateAccountCommponents(accounts)}</ScrollView>
+        <ScrollView
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={() => {
+                this.setState({ refreshing: true });
+                this.GetAccounts();
+                this.setState({ refreshing: false });
+              }}
+            />
+          }
+        >
+          {this.CreateAccountCommponents(accounts)}
+        </ScrollView>
       </View>
     );
   }
@@ -150,6 +168,7 @@ const mapDispatchToProps = (dispatch) =>
   bindActionCreators(
     {
       updateAccounts: UpdateAccounts,
+      clearAccount: ClearAccount,
     },
     dispatch
   );
