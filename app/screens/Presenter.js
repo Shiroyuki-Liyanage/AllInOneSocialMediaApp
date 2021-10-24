@@ -3,7 +3,7 @@ import TwitterAccount from "../common/Accounts/TwitterAccount";
 import { AccountType } from "../common/Accounts/AccountType";
 
 import { CreateTwitterSocialPosts } from "../common/SocialPosts/CreateTwitterSocialPosts";
-import { CreateRedditSocialPosts } from "../common/SocialPosts/CreateRedditSocialPost";
+import { CreateRedditSocialPosts } from "../common/SocialPosts/CreateRedditSocialPosts";
 
 import SocialPost from "./components/SocialPost";
 import ImageSocialPost from "./components/ImageSocialPost";
